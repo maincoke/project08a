@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
+import { FormControl, Validators, NgForm, FormGroup, FormControlName } from '@angular/forms';
+import { Creds } from '../../data-model/creds';
 
 @Component({
   selector: 'app-login',
@@ -9,9 +8,25 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
+  public loginAccount = new FormControl('', [ Validators.required, Validators.email ]);
+  public passwAccount = new FormControl('', [ Validators.required, Validators.minLength(8) ]);
+  public credsForm: FormGroup = new FormGroup({
+    loginAccount: this.loginAccount,
+    passwAccount: this.passwAccount
+  });
   constructor() { }
 
   ngOnInit() { }
 
+
+  submitLogin() {
+    const userCreds: Creds = new Creds();
+    userCreds.email = this.loginAccount.value;
+    userCreds.pword = this.passwAccount.value;
+    console.log(userCreds);
+    this.loginAccount.reset('');
+    this.passwAccount.reset('');
+    this.credsForm.controls.loginAccount.setErrors(null);
+    this.credsForm.controls.passwAccount.setErrors(null);
+  }
 }

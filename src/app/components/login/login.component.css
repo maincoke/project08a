@@ -1,3 +1,52 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+  padding: 0.5rem;
+  background-color: #282828e8;
+}
+
+.login-container > * {
+  width: 100%;
+  color: #f5f5f5;
+}
+
+.login-title {
+  text-align: center;
+  background-color: #282828e8;
+  color: whitesmoke;
+  border-radius: 5px 5px 0 0;
+  width: 60%;
+  margin: 0 auto;
+}
+
+mat-form-field {
+  margin-bottom: 0.5rem !important;
+}
+
 mat-icon {
   margin-right: 0.5rem !important;
+}
+
+mat-label, mat-hint {
+  color: whitesmoke !important;
+}
+
+mat-error {
+  background-color: pink !important;
+  border-radius: 3px;
+  height: 1.2rem;
+  text-align: center;
+  width: auto;
+  vertical-align: middle;
+  padding-top: 3px;
+}
+
+:host /deep/ mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-outline {
+  color: whitesmoke !important;
+}
+
+button[type="submit"] {
+  width: 50% !important;
 }
