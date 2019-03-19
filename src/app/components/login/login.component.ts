@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
   signupUser() {
    const singupDialog = this.userDialog.open(SignupComponent, {
      panelClass: 'signup-dialog',
-     width: '50%',
+     width: '40%',
      height: 'auto',
      disableClose: false,
      closeOnNavigation: false,

@@ -1,7 +1,8 @@
 <h1 mat-dialog-title [ngClass]="{'title-dialog': true}">Registro de Usuario</h1>
+<mat-divider></mat-divider>
 <form action="" class="" autocomplete="off" (ngSubmit)='sendSignup()' [formGroup]='userForm'>
-  <div mat-dialog-content>
-    <mat-form-field appearance="outline" MatFormFieldControl class="col-sm-7">
+  <!--div mat-dialog-content-->
+    <mat-form-field appearance='outline' MatFormField class="col-sm-12">
       <mat-label>Nombre Completo</mat-label>
       <input type="text" matInput minlength="8" formControlName="namesUser">
       <mat-icon matPrefix>person_outline</mat-icon>
@@ -11,7 +12,7 @@
         La identificación de nombre y apellido es <strong>necesario y obligatorio!</strong>
       </mat-error>
     </mat-form-field>
-    <mat-form-field appearance="outline" MatFormFieldControl class="col-sm-5">
+    <mat-form-field appearance='outline' MatFormField class="col-sm-12">
       <mat-label>Correo electrónico</mat-label>
       <input type="email" matInput formControlName="emailUser">
       <mat-icon matPrefix>mail_outline</mat-icon>
@@ -21,7 +22,7 @@
         La dirección de correo eletcrónico es <strong>necesaria y obligatoria!</strong>
       </mat-error>
     </mat-form-field>
-  </div>
+  <!--/div-->
   <div mat-dialog-actions>
 
   </div>

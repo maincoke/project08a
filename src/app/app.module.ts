@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule, MatIcon } from '@angular/material/icon';
 import { MatInputModule, MatInput } from '@angular/material/input';
@@ -28,12 +29,13 @@ import { SignupComponent } from './components/signup/signup.component';
     ReactiveFormsModule, FormsModule,
     MatFormFieldModule, MatInputModule,
     MatButtonModule, MatIconModule,
-    MatDialogModule,
+    MatDialogModule, MatDividerModule,
     AppRoutingModule
   ],
   exports: [
     MatFormFieldModule, MatInputModule,
     MatButtonModule, MatIconModule,
+    MatDividerModule, MatDialogModule
   ],
   providers: [ ],
   bootstrap: [ AppComponent ]
