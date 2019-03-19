@@ -18,3 +18,13 @@ body {
   height: 40%;
   border-radius: 5px;
 }
+
+.signup-dialog .mat-dialog-container {
+  background-color: dimgray !important;
+  background: dimgray !important;
+  color: whitesmoke !important;
+  border: 1px solid whitesmoke !important;
+  box-shadow: 0 0 10px whitesmoke;
+  padding: 0.5rem !important;
+  overflow: hidden !important;
+}

@@ -23,4 +23,5 @@
   <button mat-raised-button color="accent" type="submit" [disabled]="loginAccount.invalid || passwAccount.invalid">
     Ingresar
   </button>
+  <p [ngClass]="{'signup': true}">¿No tienes cuenta? Registrate <a (click)="signupUser()">aquí</a></p>
 </form>

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, NgForm, FormGroup, FormControlName } from '@angular/forms';
+import { SignupComponent } from '../signup/signup.component';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Creds } from '../../data-model/creds';
 
 @Component({
@@ -14,10 +16,9 @@ export class LoginComponent implements OnInit {
     loginAccount: this.loginAccount,
     passwAccount: this.passwAccount
   });
-  constructor() { }
+  constructor(public userDialog: MatDialog) { }
 
   ngOnInit() { }
-
 
   submitLogin() {
     const userCreds: Creds = new Creds();
@@ -28,5 +29,20 @@ export class LoginComponent implements OnInit {
     this.passwAccount.reset('');
     this.credsForm.controls.loginAccount.setErrors(null);
     this.credsForm.controls.passwAccount.setErrors(null);
+  }
+
+  signupUser() {
+   const singupDialog = this.userDialog.open(SignupComponent, {
+     panelClass: 'signup-dialog',
+     width: '50%',
+     height: 'auto',
+     disableClose: false,
+     closeOnNavigation: false,
+     autoFocus: false,
+   });
+
+   singupDialog.afterClosed().subscribe(result => {
+     alert('Se cerró la ventana de dialogo!!');
+   });
   }
 }

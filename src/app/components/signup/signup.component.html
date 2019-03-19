@@ -1,0 +1,28 @@
+<h1 mat-dialog-title [ngClass]="{'title-dialog': true}">Registro de Usuario</h1>
+<form action="" class="" autocomplete="off" (ngSubmit)='sendSignup()' [formGroup]='userForm'>
+  <div mat-dialog-content>
+    <mat-form-field appearance="outline" MatFormFieldControl class="col-sm-7">
+      <mat-label>Nombre Completo</mat-label>
+      <input type="text" matInput minlength="8" formControlName="namesUser">
+      <mat-icon matPrefix>person_outline</mat-icon>
+      <mat-hint color="f5f5f5">Nombres y apellidos del usuario</mat-hint>
+      <mat-error *ngIf="namesUser.invalid && !namesUser.hasError('required')">¡No se pueden <strong>validar</strong> el(los) nombre(s) y apellido(s)!</mat-error>
+      <mat-error *ngIf="namesUser.hasError('required')">
+        La identificación de nombre y apellido es <strong>necesario y obligatorio!</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" MatFormFieldControl class="col-sm-5">
+      <mat-label>Correo electrónico</mat-label>
+      <input type="email" matInput formControlName="emailUser">
+      <mat-icon matPrefix>mail_outline</mat-icon>
+      <mat-hint color="f5f5f5">Dirección de correo electrónico para asociar la cuenta</mat-hint>
+      <mat-error *ngIf="emailUser.hasError('email')">¡No se puede <strong>validar</strong> esta dirección de correo!</mat-error>
+      <mat-error *ngIf="emailUser.hasError('required')">
+        La dirección de correo eletcrónico es <strong>necesaria y obligatoria!</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+
+  </div>
+</form>
