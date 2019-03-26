@@ -4,6 +4,13 @@
   width: 100%;
 }
 
+.btn-close-dialog {
+  float: right;
+  background-color: transparent;
+  border: none;
+  color: #363636;
+}
+
 mat-divider {
   border-color: whitesmoke !important;
 }
@@ -39,5 +46,5 @@ mat-error {
 }
 
 button[type="submit"] {
-  width: 50% !important;
+  width: 100% !important;
 }

@@ -1,7 +1,8 @@
+<button mat-dialog-close class="btn-close-dialog"><mat-icon>close</mat-icon></button>
 <h1 mat-dialog-title [ngClass]="{'title-dialog': true}">Registro de Usuario</h1>
 <mat-divider></mat-divider>
 <form action="" class="" autocomplete="off" (ngSubmit)='sendSignup()' [formGroup]='userForm'>
-  <!--div mat-dialog-content-->
+  <div mat-dialog-content>
     <mat-form-field appearance='outline' MatFormField class="col-sm-12">
       <mat-label>Nombre Completo</mat-label>
       <input type="text" matInput minlength="8" formControlName="namesUser">
@@ -22,8 +23,31 @@
         La dirección de correo eletcrónico es <strong>necesaria y obligatoria!</strong>
       </mat-error>
     </mat-form-field>
-  <!--/div-->
-  <div mat-dialog-actions>
-
+    <mat-form-field appearance='outline' MatFormField class="col-sm-12">
+      <mat-label>Contraseña</mat-label>
+      <input type="password" matInput minlength="8" formControlName="pwordUser">
+      <mat-icon matPrefix>vpn_key</mat-icon>
+      <mat-hint color="f5f5f5">Contraseña de usuario que debe ser mínimo de 8 caracteres</mat-hint>
+      <mat-error *ngIf="pwordUser.invalid && !pwordUser.hasError('required')">
+        ¡La contraseña debe tener mínimo <strong>8 carateres!</strong></mat-error>
+      <mat-error *ngIf="pwordUser.hasError('required')">
+        La contraseña es <strong>necesaria y obligatoria!</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance='outline' MatFormField class="col-sm-12">
+      <mat-label>Confirmación Contraseña</mat-label>
+      <input type="password" matInput minlength="8" [errorStateMatcher]="pwordMatcher" formControlName="againPwrd">
+      <mat-icon matPrefix>lock</mat-icon>
+      <mat-hint color="f5f5f5">Confirmación de contraseña que debe ser igual a la anterior</mat-hint>
+      <mat-error *ngIf="userForm.hasError('notEqual') && !againPwrd.invalid && !againPwrd.hasError('required')">
+        La confirmación de contraseña debe <strong>conicidir con la anterior!</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <mat-divider></mat-divider>
+  <div mat-dialog-actions class="col-4 offset-4">
+    <button mat-raised-button color="accent" type="submit" [disabled]="userForm.invalid || namesUser.invalid || emailUser.invalid">
+      Registrar
+    </button>
   </div>
 </form>
