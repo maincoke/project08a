@@ -11,7 +11,7 @@ export class PwordMatcher implements ErrorStateMatcher {
    return (notvalidCt || notvalidPt);
  }
 }
-//
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',

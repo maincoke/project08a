@@ -1,13 +1,18 @@
 const { series, parallel } = require('gulp');
-const { exec } = require('child_process');
+const del = require('del');
+const exec = require('child_process').exec;
+const srcSession = 'server/user/session/shopper/';
+
+function sessionCleaner() {
+  return del([srcSession + '*', '!' + srcSession + 'LOCK']);
+}
 
 function runDataServer() {
-  exec('cd server/user/session/shopper && rm -- !(LOCK)')
-  exec('cd server && node start.js');
+  return exec('cd server && node start.js');
 }
 
 function runViewServer() {
-  exec('ng serve --host 0.0.0.0 --port 3100');
+  return exec('npm run start');
 }
 
-exports.default = parallel(runDataServer);
+exports.default = parallel(series(sessionCleaner, runDataServer), runViewServer);
