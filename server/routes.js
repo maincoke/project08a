@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const objectId = mongoose.Types.ObjectId;
 const newuuid4 = require('uuid/v4');
-const User = require('./models.js');
+const User = require('./models.js').UserData;
 const BCRYPT_SALT_ROUNDS = 6;
 
 // Verificación y regeneración de sesión del Usuario //
@@ -63,15 +63,13 @@ Router.post('/newuser', function(req, res) {
     let findmail = User.where({ emailusr: username });
     findmail.findOne((error) => {
         if (error) {
-            let pworduser = req.body.user_pword;
+            let pworduser = req.body.credsusr.pword;
             bcrypt.hash(pworduser, BCRYPT_SALT_ROUNDS).then(function(pwordHashed) {
                 let newuser = new User({
-                    identusr: newuuid4(),
-                    namesusr: req.body.user_names,
-                    dbirtusr: req.body.user_dbirt,
-                    emailusr: req.body.user_email,
+                    nameuser: req.body.namesusr,
+                    emailusr: req.body.credsusr.email,
                     pwordusr: pwordHashed,
-                    schedule: [{ id: new objectId }]
+                    shopcar: [{ order: req.body.shopcar.order }]
                 });
                 newuser.save().then(doc => {
                     let result = { id: doc.identusr, msg: "Registro de usuario agregado con éxito!!" };
@@ -92,16 +90,16 @@ Router.post('/newuser', function(req, res) {
     });
 });
 
-// Inclusión de un nuevo evento del usuario para la Agenda //
+// *** Inclusión de un nuevo producto al carrito de compras del usuario *** //
 Router.post('/newproduct', function(req, res) {
     let sessusr = req.session;
     if (sessusr.username) {
         User.findOne({ identusr: sessusr.userId }).exec().then(doc => {
-            let event = req.body;
-            event.id = new objectId;
-            doc.schedule.push(event);
-            doc.save().then((evtusr) => {
-                let success = { id: event.id, msg: "Evento agendado con éxito!!" };
+            let product = req.body;
+            //product.id = new objectId;
+            doc.shopcar.push(product);
+            doc.save().then((shpusr) => {
+                let success = { id: product.name, msg: "Evento agendado con éxito!!" };
                 res.send(success);
             }).catch(error => {
                 let wrong = { msg: 'Hubo un error en el registro del evento!!' };

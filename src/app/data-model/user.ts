@@ -1,8 +1,7 @@
-import { Product } from './product';
+import { ShopCar } from './shop-car';
 import { Creds } from './creds';
 export class User {
   public namesusr: string;
   public credsusr: Creds;
-  public shopcar: Product[];
-  public orderusr: number[];
+  public shopcar: ShopCar;
 }

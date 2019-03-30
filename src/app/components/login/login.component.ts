@@ -32,17 +32,17 @@ export class LoginComponent implements OnInit {
   }
 
   signupUser() {
-   const singupDialog = this.userDialog.open(SignupComponent, {
-     panelClass: 'signup-dialog',
-     width: '40%',
-     height: '520px',
-     disableClose: false,
-     closeOnNavigation: false,
-     autoFocus: false,
-   });
+    const singupDialog = this.userDialog.open(SignupComponent, {
+      panelClass: 'signup-dialog',
+      width: '40%',
+      height: '520px',
+      disableClose: true,
+      closeOnNavigation: false,
+      autoFocus: false,
+    });
 
-   singupDialog.afterClosed().subscribe(result => {
-     alert('Se cerró la ventana de dialogo!!');
-   });
+    /* singupDialog.afterClosed().subscribe(result => {
+      console.log('Se cerró la ventana de dialogo!!');
+    });*/
   }
 }

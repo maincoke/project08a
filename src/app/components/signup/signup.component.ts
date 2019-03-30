@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FormControl, Validators, NgForm, FormGroup, FormControlName, FormGroupDirective } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material';
 import { User } from '../../data-model/user';
 
 export class PwordMatcher implements ErrorStateMatcher {
@@ -31,9 +32,24 @@ export class SignupComponent {
   public pwordMatcher = new PwordMatcher();
 
   constructor(public userSignup: MatDialogRef<SignupComponent>,
-              @Inject(MAT_DIALOG_DATA) public signupData: User) { }
+              @Inject(MAT_DIALOG_DATA) public signupData: User,
+              private barNotice: MatSnackBar) { }
 
   sendSignup() {
+    const newSignUser: User = new User();
+
+    if (this.userForm.valid) {
+      newSignUser.namesusr = this.userForm.value.namesUser;
+      newSignUser.credsusr = {
+        email: this.userForm.value.emailUser,
+        pword: this.userForm.value.againPwrd
+      };
+      // Agregar usuario con los servicios del HttpClient
+      // Refresacar el carrito
+      // Ir al Carrito
+      console.log(newSignUser);
+      const notice = this.barNotice.open('Usuario registrado con éxito!!', 'Aceptar', { duration: 4000 });
+    }
     console.log('Enviando datos...!');
   }
 
