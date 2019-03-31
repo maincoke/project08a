@@ -8,7 +8,8 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const objectId = mongoose.Types.ObjectId;
 const newuuid4 = require('uuid/v4');
-const User = require('./models.js').UserData;
+const { User } = require('./models.js');
+const { Product } = require('./models.js');
 const BCRYPT_SALT_ROUNDS = 6;
 
 // Verificación y regeneración de sesión del Usuario // ***********************************************************
@@ -59,6 +60,7 @@ Router.get('/logout', function(req, res) {
 
 // *** Inclusión de datos básicos del Usuario *** //
 Router.post('/newuser', function(req, res) {
+    console.log(req.body.credsusr.email);
     let username = req.body.credsusr.email;
     let findmail = User.where({ emailusr: username });
     findmail.findOne((error) => {
@@ -84,7 +86,8 @@ Router.post('/newuser', function(req, res) {
                 res.send(wrong);
             });
         } else {
-            let wrong = { msgerr: "La cuenta con la dirección de correo " + username + ",\n ya se encuentra registrada!!" };
+            console.error(error);
+            let wrong = JSON.stringify({ msgerr: "La cuenta con la dirección de correo " + username + ",\n ya se encuentra registrada!!" });
             res.send(wrong);
         }
     });

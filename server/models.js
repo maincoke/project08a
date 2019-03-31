@@ -15,12 +15,8 @@ let ProductSchema = new dataSchema({
   price: { type: Number, require: true, alias: 'pdpce' },
   stock: { type: Number, alias: 'pdstk' },
 });
-
-let ProductData = mongoose.model('Producto', ProductSchema);
-module.exports = ProductData;
 /**
- * ** ///////////// ** ////////////// ** ///////////// ** ////////////// ** ///////////// ** //////////////
- */
+ * ** ///////////// ** ////////////// ** ///////////// ** ////////////// ** ///////////// ** /////////////*/
 /* Esquema de Datos de los Productos del Carrito de Usuario - Tienda Online - Nivel 3 */
 let ShopCarProdsSchema = new dataSchema({
   id: { type: objectId, alias: 'scpid' },
@@ -44,4 +40,6 @@ let UserSchema = new dataSchema({
 });
 
 let UserData = mongoose.model('Usuario', UserSchema);
-module.exports = UserData;
+let ProductData = mongoose.model('Producto', ProductSchema);
+
+module.exports = { User: UserData, Product: ProductData };

@@ -7,6 +7,7 @@ const path = require('path'),
     Routing = require('./routes.js'),
     express = require('express'),
     session = require('express-session'),
+    cors = require('cors');
     genuuid = require('uuid/v4'),
     levelSession = require('level-session-store')(session),
     bodyParser = require('body-parser'),
@@ -44,6 +45,7 @@ shop.use(session({
 // shop.use(express.static('../client'));
 shop.use(bodyParser.json());
 shop.use(bodyParser.urlencoded({ extended: true }));
+shop.use(cors());
 shop.use('/shopping', Routing);
 
 /**

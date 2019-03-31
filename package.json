@@ -43,6 +43,7 @@
     "@types/superagent": "^4.1.1",
     "bluebird": "^3.5.3",
     "codelyzer": "~4.5.0",
+    "cors": "^2.8.5",
     "del": "^4.0.0",
     "gulp": "^4.0.0",
     "jasmine-core": "~2.99.1",

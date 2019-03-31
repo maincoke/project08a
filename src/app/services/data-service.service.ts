@@ -12,12 +12,16 @@ export class DataService {
   constructor() { }
 
   public addNewUser(dataUser: User) {
-    request.post('localhost:3000/shopping/newuser').send(dataUser)
+    const userData = JSON.stringify(dataUser);
+    console.log(userData);
+    request.post('http://localhost:3000/shopping/newuser').type('application/json').send(userData)
+    .responseType('json')
     .end((err, res) => {
       if (err) {
         console.error(err);
       } else {
-        console.log(res);
+        console.log(res.body);
+        // return
       }
     });
   }
