@@ -11,7 +11,7 @@ const newuuid4 = require('uuid/v4');
 const User = require('./models.js').UserData;
 const BCRYPT_SALT_ROUNDS = 6;
 
-// Verificación y regeneración de sesión del Usuario //
+// Verificación y regeneración de sesión del Usuario // ***********************************************************
 Router.get('/', function(req, res) {
     let sessusr = req.session;
     if (sessusr.username) {
@@ -21,10 +21,10 @@ Router.get('/', function(req, res) {
     }
 });
 
-// Verificación de Login, acceso y configuración de sesion del Usuario //
+// *** Verificación de Login, acceso y configuración de Sesion del Usuario *** //
 Router.post('/login', function(req, res) {
-    let username = req.body.user,
-        userpass = req.body.pass;
+    let username = req.body.email,
+        userpass = req.body.pword;
     User.findOne({ emailusr: username }).exec().then(doc => {
         bcrypt.compare(userpass, doc.pwordusr).then(validPword => {
             let result;
@@ -34,32 +34,32 @@ Router.post('/login', function(req, res) {
                 req.session.regenerate(error => { if (error) throw console.error(error) });
                 let sessusr = req.session;
                 sessusr.username = username;
-                sessusr.userId = doc.identusr;
-                result = { id: doc.identusr, username: doc.emailusr, access: 'ok' };
+                sessusr.userId = doc._id;
+                result = { id: doc._id, username: doc.emailusr, access: true };
             }
             res.send(result);
         });
     }).catch(error => {
-        let wrong = { access: '', msg: 'Cuenta de usuario no se encuentra registrada!!' };
+        let wrong = { access: false, msg: 'Cuenta de usuario no se encuentra registrada!!' };
         res.send(wrong);
-        console.log('Error en la autenticación del usuario: \n' + error);
+        console.log('=>>>>Error en la autenticación del usuario: \n' + error);
     });
 });
 
-// Terminación de sesisión y salida de la App Agenda //
+// Terminación de sesisión y salida de la App Tienda Online // ******************************************************
 Router.get('/logout', function(req, res) {
     req.session.destroy(function(error) {
         if (error) {
-            console.log('Hubo un error en el cierre de la sessión!!');
+            console.log('=>>>>Hubo un error en el cierre de la sessión!!');
         } else {
             res.redirect('/');
         }
     });
 });
 
-// Inclusión de datos básicos del Usuario  //
+// *** Inclusión de datos básicos del Usuario *** //
 Router.post('/newuser', function(req, res) {
-    let username = req.body.user_email;
+    let username = req.body.credsusr.email;
     let findmail = User.where({ emailusr: username });
     findmail.findOne((error) => {
         if (error) {
@@ -69,22 +69,22 @@ Router.post('/newuser', function(req, res) {
                     nameuser: req.body.namesusr,
                     emailusr: req.body.credsusr.email,
                     pwordusr: pwordHashed,
-                    shopcar: [{ order: req.body.shopcar.order }]
+                    shopcar: [{ order: req.body.shopcar.order, paidod: req.body.shopcar.paidod }]
                 });
                 newuser.save().then(doc => {
-                    let result = { id: doc.identusr, msg: "Registro de usuario agregado con éxito!!" };
+                    let result = { msgscs: "Registro de usuario agregado con éxito!!" };
                     res.send(result);
                 }).catch(function(error) {
-                    let wrong = { msg: "Hubo un error en el registro de usuario!!" };
+                    let wrong = { msgerr: "Hubo un error en el registro de usuario!!" };
                     res.send(wrong);
-                    console.log('Error en el registro de usuario: ');
+                    console.log('=>>>>Error en el registro de usuario: ');
                 });
             }).catch(function(error) {
-                let wrong = { msg: "Error: La contraseña no se logró generar con éxito!!" };
+                let wrong = { msgerr: "Error: La contraseña no se logró generar con éxito!!" };
                 res.send(wrong);
             });
         } else {
-            let wrong = { msg: "La cuenta con la dirección de correo " + username + ",\n ya se encuentra registrada!!" };
+            let wrong = { msgerr: "La cuenta con la dirección de correo " + username + ",\n ya se encuentra registrada!!" };
             res.send(wrong);
         }
     });
@@ -116,11 +116,11 @@ Router.post('/newproduct', function(req, res) {
     }
 });
 
-// Eliminación de evento en la agenda del Usuario //
+// Eliminación de un producto en el Carrito del Usuario en la Tienda Online // ****************************************
 Router.post('/deleteproduct/:id', function(req, res) {
     let sessusr = req.session;
     if (sessusr.username) {
-        User.findOneAndUpdate({ identusr: sessusr.userId }, { $pull: { schedule: { id: req.params.id } } }, (error, doc) => {
+        User.findOneAndUpdate({ _id: sessusr.userId }, { $pull: { products: { id: req.params._id } } }, (error, doc) => {
             if (!error) {
                 let scheduleDoc = doc.schedule;
                 let eventdel = scheduleDoc.findIndex(evt => evt.id == req.params.id);
@@ -135,7 +135,7 @@ Router.post('/deleteproduct/:id', function(req, res) {
     }
 });
 
-// Actualización de evento en la agenda del usuario: cambio de dia y hora. NO la duración del evento //
+// Actualización de cantidad de un producto en el Carrito del Usuario en la Tienda Online // ***************************
 Router.post('/update', function(req, res) {
     let sessusr = req.session;
     if (sessusr.username) {
@@ -152,12 +152,12 @@ Router.post('/update', function(req, res) {
     }
 });
 
-// Obtención de todos los eventos agendados del usuario para el calendario //
+// Obtención de todos los productos del Carrito del usuario la Tienda Online // ***************************************
 Router.get('/all', function(req, res) {
     let sessusr = req.session;
     if (sessusr.username) {
         User.findOne({ emailusr: sessusr.username }).exec().then(doc => {
-            let datauser = { username: doc.emailusr, eventos: doc.schedule };
+            let datauser = { username: doc.emailusr, productos: doc.shopcar.paidod };
             res.send(datauser);
         }).catch(error => {
             let wrong = { msg: 'Cuenta de usuario no existe ó expiró la sessión!!' };

@@ -9,23 +9,23 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatSnackBarModule } from '@angular/material';
 
+import { DataService } from './services/data-service.service';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { TopbarComponent } from './components/topbar/topbar.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { NoticebarComponent } from './components/noticebar/noticebar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     TopbarComponent,
-    SignupComponent,
-    NoticebarComponent
+    SignupComponent
   ],
   entryComponents: [
-    SignupComponent, NoticebarComponent
+    SignupComponent
    ],
   imports: [
     BrowserModule,
@@ -43,7 +43,7 @@ import { NoticebarComponent } from './components/noticebar/noticebar.component';
     MatDividerModule, MatDialogModule,
     MatSnackBarModule
   ],
-  providers: [ ],
+  providers: [ DataService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

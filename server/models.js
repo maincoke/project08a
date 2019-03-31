@@ -16,7 +16,7 @@ let ProductSchema = new dataSchema({
   stock: { type: Number, alias: 'pdstk' },
 });
 
-let ProductData = mongoose.model('Productos', ProductSchema);
+let ProductData = mongoose.model('Producto', ProductSchema);
 module.exports = ProductData;
 /**
  * ** ///////////// ** ////////////// ** ///////////// ** ////////////// ** ///////////// ** //////////////

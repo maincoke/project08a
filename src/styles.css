@@ -28,3 +28,15 @@ body {
   padding: 0.5rem !important;
   overflow: hidden !important;
 }
+
+.notice-bar-error {
+  color: #b90000 !important;
+  font-weight: bolder;
+  background: #fc9090 !important;
+}
+
+.notice-bar-success {
+  color: #1a7000 !important;
+  font-weight: bolder;
+  background: #5fc777 !important;
+}
