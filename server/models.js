@@ -26,7 +26,7 @@ let ShopCarProdsSchema = new dataSchema({
 
 /* Esquema de Datos del Carrito de Usuario - Tienda Online - Nivel 2 */
 let ShopCarSchema = new dataSchema({
-  order: { type: Number, unique: true, require: true, alias: 'scodr'},
+  order: { type: String, require: true, alias: 'scodr'},
   paidod: { type: Boolean, require: true, alias: 'scpdo' },
   products: [ShopCarProdsSchema]
 }, { id: false, _id: false });

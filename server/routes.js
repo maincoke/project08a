@@ -7,7 +7,7 @@ const Router = require('express').Router();
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const objectId = mongoose.Types.ObjectId;
-const newuuid4 = require('uuid/v4');
+const newuuid1 = require('uuid/v1');
 const { User } = require('./models.js');
 const { Product } = require('./models.js');
 const BCRYPT_SALT_ROUNDS = 6;
@@ -63,25 +63,27 @@ Router.post('/newuser', function(req, res) {
     console.log(req.body.credsusr.email);
     let username = req.body.credsusr.email;
     let findmail = User.where({ emailusr: username });
-    findmail.findOne((error) => {
-        if (error) {
+    findmail.findOne((error, doc) => {
+        if (error || !doc) {
             let pworduser = req.body.credsusr.pword;
             bcrypt.hash(pworduser, BCRYPT_SALT_ROUNDS).then(function(pwordHashed) {
                 let newuser = new User({
                     nameuser: req.body.namesusr,
                     emailusr: req.body.credsusr.email,
                     pwordusr: pwordHashed,
-                    shopcar: [{ order: req.body.shopcar.order, paidod: req.body.shopcar.paidod }]
+                    shopcar: [{ order: newuuid1(), paidod: false }]
                 });
                 newuser.save().then(doc => {
                     let result = { msgscs: "Registro de usuario agregado con éxito!!" };
                     res.send(result);
                 }).catch(function(error) {
+                    console.error(error);
                     let wrong = { msgerr: "Hubo un error en el registro de usuario!!" };
                     res.send(wrong);
                     console.log('=>>>>Error en el registro de usuario: ');
                 });
             }).catch(function(error) {
+                console.error(error);
                 let wrong = { msgerr: "Error: La contraseña no se logró generar con éxito!!" };
                 res.send(wrong);
             });

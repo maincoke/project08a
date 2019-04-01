@@ -49,7 +49,8 @@ export class SignupComponent {
         pword: this.userForm.value.againPwrd
       };
       console.log(this.newSignUser);
-      this.dataService.addNewUser(this.newSignUser);
+      const message = this.dataService.addNewUser(this.newSignUser);
+      console.log(message);
       // Agregar usuario con los servicios del HttpClient
       // Refresacar el carrito
       // Ir al Carrito
