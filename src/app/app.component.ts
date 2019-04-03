@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { LoginComponent } from './components/login/login.component';
 
 @Component({
@@ -7,5 +7,5 @@ import { LoginComponent } from './components/login/login.component';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'project08a';
+  title = 'La Bodega';
 }

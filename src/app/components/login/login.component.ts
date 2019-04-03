@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { FormControl, Validators, NgForm, FormGroup, FormControlName } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,7 +11,7 @@ import { Creds } from '../../data-model/creds';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   public loginAccount = new FormControl('', [ Validators.required, Validators.email ]);
   public passwAccount = new FormControl('', [ Validators.required, Validators.minLength(8) ]);
   public credsForm: FormGroup = new FormGroup({
@@ -20,9 +20,10 @@ export class LoginComponent implements OnInit {
   });
   private dataService: DataService = new DataService();
   public submitBttn = true;
-  constructor(public userDialog: MatDialog, public barNotice: MatSnackBar) { }
 
-  ngOnInit() { }
+  constructor(private bgRender: Renderer2, public userDialog: MatDialog, public barNotice: MatSnackBar) {
+    this.bgRender.addClass(document.body, 'bckgr-login');
+  }
 
   submitLogin() {
     if (this.credsForm.valid) {
@@ -71,5 +72,7 @@ export class LoginComponent implements OnInit {
     });*/
   }
 
-  disablingBtn() { if (this.loginAccount.valid && this.passwAccount.valid) { this.submitBttn = false; } else { this.submitBttn = true; } }
+  disablingBtn() {
+    if (this.loginAccount.valid && this.passwAccount.valid) { this.submitBttn = false; } else { this.submitBttn = true; }
+  }
 }
