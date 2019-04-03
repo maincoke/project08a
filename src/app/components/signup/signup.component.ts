@@ -1,9 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FormControl, Validators, NgForm, FormGroup, FormControlName, FormGroupDirective } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material';
-import { SuperAgent, SuperAgentStatic } from 'superagent';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataService } from '../../services/data-service.service';
 import { User } from '../../data-model/user';
 
@@ -18,7 +17,7 @@ export class PwordMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent {
   public namesUser = new FormControl('', [ Validators.required, Validators.minLength(8) ]);
@@ -32,12 +31,11 @@ export class SignupComponent {
     againPwrd: this.againPwrd
   },  {validators: this.dontMatch });
   public pwordMatcher = new PwordMatcher();
-
-  public dataService: DataService = new DataService;
+  private dataService: DataService = new DataService();
 
   constructor(private userSignup: MatDialogRef<SignupComponent>,
               @Inject(MAT_DIALOG_DATA) private newSignUser: User,
-              private barNotice: MatSnackBar) {}
+              public barNotice: MatSnackBar) {}
 
   sendSignup() {
     this.newSignUser = new User();
@@ -48,20 +46,19 @@ export class SignupComponent {
         email: this.userForm.value.emailUser,
         pword: this.userForm.value.againPwrd
       };
-      console.log(this.newSignUser);
-      const message = this.dataService.addNewUser(this.newSignUser);
-      console.log(message);
-      // Agregar usuario con los servicios del HttpClient
-      // Refresacar el carrito
-      // Ir al Carrito
-      const notice = this.barNotice.open('Usuario registrado con éxito!!', '',
-       {  duration: 4000,
-          panelClass: 'notice-bar-success'
-       });
+      const addUser = this.dataService.addNewUser(this.newSignUser);
+      let response: any; let result: any; let barClass: any;
+      addUser.then(res => {
+        response = res.body;
+      }).catch(err => {
+        console.error(err);
+      }).finally(()  => {
+        result = response.msgscs ? response.msgscs : response.msgerr;
+        barClass = response.msgscs ? 'notice-bar-success' : 'notice-bar-error';
+        this.barNotice.open(result, '', { duration: 4000, panelClass: barClass });
+      });
       this.userSignup.close();
     }
-
-    console.log('Enviando datos...!');
   }
 
   dontMatch(pwordGroup: FormGroup) {

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, Component } from '@angular/core';
 import * as request from 'superagent';
-// import { SuperAgent, SuperAgentStatic, SuperAgentRequest } from 'superagent';
 import { User } from '../data-model/user';
+import { Creds } from '../data-model/creds';
 import { ShopCar } from '../data-model/shop-car';
 import { Product } from '../data-model/product';
 
@@ -9,21 +9,17 @@ import { Product } from '../data-model/product';
   providedIn: 'root'
 })
 export class DataService {
-  constructor() { }
+  private urlSvrData = 'http://localhost:3000/shopping';
+  constructor() {}
+
+  public  checkLogin(credsUser: Creds) {
+    const userCreds = JSON.stringify(credsUser);
+    console.log(userCreds);
+    return request.post(this.urlSvrData + '/login').type('application/json').responseType('json').send(userCreds);
+  }
 
   public addNewUser(dataUser: User) {
     const userData = JSON.stringify(dataUser);
-    console.log(userData);
-    let responseData;
-    return responseData = request.post('http://localhost:3000/shopping/newuser').type('application/json').send(userData)
-    .responseType('json')
-    .end((err, res) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(res.body);
-        return res.body.msg;
-      }
-    });
+    return request.post(this.urlSvrData + '/newuser').type('application/json').responseType('json').send(userData);
   }
 }

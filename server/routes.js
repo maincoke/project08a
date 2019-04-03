@@ -30,20 +30,20 @@ Router.post('/login', function(req, res) {
         bcrypt.compare(userpass, doc.pwordusr).then(validPword => {
             let result;
             if (!validPword) {
-                result = { access: '', msg: 'Las credenciales no son válidas!! La contraseña no es correcta!!' };
+                result = { access: false, msg: 'Las credenciales no son válidas!! La contraseña no es correcta!!' };
             } else {
                 req.session.regenerate(error => { if (error) throw console.error(error) });
                 let sessusr = req.session;
                 sessusr.username = username;
                 sessusr.userId = doc._id;
-                result = { id: doc._id, username: doc.emailusr, access: true };
+                result = { access: true, id: doc._id, username: doc.emailusr };
             }
             res.send(result);
         });
     }).catch(error => {
         let wrong = { access: false, msg: 'Cuenta de usuario no se encuentra registrada!!' };
         res.send(wrong);
-        console.log('=>>>>Error en la autenticación del usuario: \n' + error);
+        console.error('=>>>>Error en la autenticación del usuario: \n' + error);
     });
 });
 
@@ -74,21 +74,18 @@ Router.post('/newuser', function(req, res) {
                     shopcar: [{ order: newuuid1(), paidod: false }]
                 });
                 newuser.save().then(doc => {
-                    let result = { msgscs: "Registro de usuario agregado con éxito!!" };
+                    let result = { msgscs: "Usuario registrado con éxito!!" };
                     res.send(result);
                 }).catch(function(error) {
-                    console.error(error);
                     let wrong = { msgerr: "Hubo un error en el registro de usuario!!" };
                     res.send(wrong);
                     console.log('=>>>>Error en el registro de usuario: ');
                 });
             }).catch(function(error) {
-                console.error(error);
                 let wrong = { msgerr: "Error: La contraseña no se logró generar con éxito!!" };
                 res.send(wrong);
             });
         } else {
-            console.error(error);
             let wrong = JSON.stringify({ msgerr: "La cuenta con la dirección de correo " + username + ",\n ya se encuentra registrada!!" });
             res.send(wrong);
         }

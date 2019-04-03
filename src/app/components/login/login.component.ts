@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, NgForm, FormGroup, FormControlName } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { SignupComponent } from '../signup/signup.component';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DataService } from '../../services/data-service.service';
 import { Creds } from '../../data-model/creds';
 
 @Component({
@@ -16,19 +18,42 @@ export class LoginComponent implements OnInit {
     loginAccount: this.loginAccount,
     passwAccount: this.passwAccount
   });
-  constructor(public userDialog: MatDialog) { }
+  private dataService: DataService = new DataService();
+  public submitBttn = true;
+  constructor(public userDialog: MatDialog, public barNotice: MatSnackBar) { }
 
   ngOnInit() { }
 
   submitLogin() {
-    const userCreds: Creds = new Creds();
-    userCreds.email = this.loginAccount.value;
-    userCreds.pword = this.passwAccount.value;
-    console.log(userCreds);
+    if (this.credsForm.valid) {
+      const userCreds: Creds = new Creds();
+      userCreds.email = this.loginAccount.value;
+      userCreds.pword = this.passwAccount.value;
+      const loginChk = this.dataService.checkLogin(userCreds);
+      let response: any; let result: any; let barClass: any;
+      loginChk.then(res => {
+        response = res.body;
+      }).catch(err => {
+        console.log(err);
+      }).finally(() => {
+        if (!response.access) {
+          result = response.msg;
+          barClass = 'notice-bar-error';
+          this.barNotice.open(result, '', { duration: 4000, panelClass: barClass });
+        } else {
+          // Enrutar hacia la pagina de productos y carrito //////// ****** ////// ****** ///////
+          barClass = 'notice-bar-success';
+          this.barNotice.open('Usuario autenticado!!', '', { duration: 4000, panelClass: barClass });
+          console.log(response.id + '  ----  ' + response.username);
+          // ------------ ////// --------- //////// --------- //////////////////////////////////
+        }
+      });
+    }
     this.loginAccount.reset('');
     this.passwAccount.reset('');
     this.credsForm.controls.loginAccount.setErrors(null);
     this.credsForm.controls.passwAccount.setErrors(null);
+    this.submitBttn = true;
   }
 
   signupUser() {
@@ -45,4 +70,6 @@ export class LoginComponent implements OnInit {
       console.log('Se cerró la ventana de dialogo!!');
     });*/
   }
+
+  disablingBtn() { if (this.loginAccount.valid && this.passwAccount.valid) { this.submitBttn = false; } else { this.submitBttn = true; } }
 }
