@@ -14,7 +14,6 @@ export class DataService {
 
   public  checkLogin(credsUser: Creds) {
     const userCreds = JSON.stringify(credsUser);
-    console.log(userCreds);
     return request.post(this.urlSvrData + '/login').type('application/json').responseType('json').send(userCreds);
   }
 

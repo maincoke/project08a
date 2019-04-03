@@ -19,8 +19,9 @@ import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { TopbarComponent } from './components/topbar/topbar.component';
 import { MainViewComponent } from './components/main-view/main-view.component';
-import { ShopCarComponent } from './components/shop-car/shop-car.component';
 import { ViewProductComponent } from './components/view-product/view-product.component';
+import { ShopCarComponent } from './components/shop-car/shop-car.component';
+import { PurchasesComponent } from './components/purchases/purchases.component';
 
 @NgModule({
   declarations: [
@@ -29,8 +30,9 @@ import { ViewProductComponent } from './components/view-product/view-product.com
     SignupComponent,
     TopbarComponent,
     MainViewComponent,
+    ViewProductComponent,
     ShopCarComponent,
-    ViewProductComponent
+    PurchasesComponent
   ],
   entryComponents: [
     SignupComponent

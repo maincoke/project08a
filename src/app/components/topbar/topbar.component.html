@@ -1,11 +1,32 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <div class="col-lg-2 offset-lg-6"><span>La Bodega</span></div>
-    <div class="col-lg-2">
-      <mat-icon class="icon-toolbar" aria-hidden="false">apps</mat-icon>
-      <mat-icon class="icon-toolbar" aria-hidden="false">shopping_cart</mat-icon>
-      <mat-icon class="icon-toolbar" aria-hidden="false">inbox</mat-icon>
-      <mat-icon class="icon-toolbar" aria-hidden="false">exit_to_app</mat-icon>
-    </div>
-  </mat-toolbar-row>
-</mat-toolbar>
+<div class="col-md-10 offset-md-1 navbar-expand-sm mb-3">
+  <mat-toolbar color="primary" class="top-bar-corners">
+    <mat-toolbar-row class="row top-bar-height">
+      <div class="col-xl-2 col-md-2 col-lg-2 col-sm-6"><h3>La Bodega</h3></div>
+      <div class="col-xl-2 offset-xl-8 col-lg-3 offset-lg-7 col-md-4 offset-md-6 col-sm-6">
+        <ul class="row mt-4 align-content-sm-center">
+          <li class="col-3 pl-0 pr-0">
+            <a [routerLink]="[ './' ]" class="float-sm-right">
+              <mat-icon class="icon-toolbar" aria-hidden="false">apps</mat-icon>
+            </a>
+          </li>
+          <li class="col-3 pl-0 pr-0">
+            <a [routerLink]="[ 'carrito' ]" class="float-sm-right">
+              <mat-icon class="icon-toolbar" aria-hidden="false">shopping_cart</mat-icon>
+            </a>
+          </li>
+          <li class="col-3 pl-0 pr-0">
+            <a [routerLink]="[ 'compras' ]" class="float-sm-right">
+              <mat-icon class="icon-toolbar" aria-hidden="false">inbox</mat-icon>
+            </a>
+          </li>
+          <li class="col-3 pl-0 pr-0">
+            <a [routerLink]="[ 'salir' ]" class="float-sm-right">
+              <mat-icon class="icon-toolbar" aria-hidden="false">exit_to_app</mat-icon>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
+<router-outlet></router-outlet>

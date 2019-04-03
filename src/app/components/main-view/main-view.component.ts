@@ -1,5 +1,8 @@
 import { Component, Renderer2 } from '@angular/core';
+import { Router } from '@angular/router';
 import { TopbarComponent } from '../topbar/topbar.component';
+import { ViewProductComponent } from '../view-product/view-product.component';
+
 
 @Component({
   selector: 'app-main-view',
@@ -8,8 +11,8 @@ import { TopbarComponent } from '../topbar/topbar.component';
 })
 export class MainViewComponent {
 
-  constructor(private bgRender: Renderer2) {
-    this.bgRender.addClass(document.body, 'bckgr-main');
+  constructor(private shopRouter: Router) {
+    // this.shopRouter.navigate(['catalogo/productos']);
   }
 
 }

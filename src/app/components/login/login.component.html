@@ -1,27 +1,29 @@
-<h3 class="login-title">Inicio de Sesión</h3>
-<form class="login-container" style="text-align:center" autocomplete="off" (ngSubmit)='submitLogin()' [formGroup]="credsForm">
-  <mat-form-field appearance="outline" MatFormFieldControl>
-    <mat-label>Correo electrónico</mat-label>
-    <input type="email" matInput (blur)="disablingBtn()" formControlName="loginAccount">
-    <mat-icon matPrefix>mail_outline</mat-icon>
-    <mat-hint color="f5f5f5">Dirección de correo electrónico asociado a la cuenta</mat-hint>
-    <mat-error *ngIf="loginAccount.hasError('email')">¡No se puede <strong>validar</strong> esta dirección de correo!</mat-error>
-    <mat-error *ngIf="loginAccount.hasError('required')">
-      La dirección de correo eletcrónico es  <strong>necesario y obligatorio!</strong>
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="outline" MatFormFieldControl>
-    <mat-label>Contraseña</mat-label>
-    <input type="password" matInput minlength="8" (keyup)="disablingBtn()" formControlName="passwAccount">
-    <mat-icon matPrefix>vpn_key_outline</mat-icon>
-    <mat-hint>Contraseña de validación de la cuenta</mat-hint>
-    <mat-error *ngIf="passwAccount.invalid && !passwAccount.hasError('required')">
-      ¡La contraseña es inválida! Debe ser minimo de <strong>8 caracteres</strong>
-    </mat-error>
-    <mat-error *ngIf="passwAccount.hasError('required')">La contraseña no puede estar <strong>vacía!</strong></mat-error>
-  </mat-form-field>
-  <button mat-raised-button color="accent" type="submit" [disabled]="loginAccount.invalid || passwAccount.invalid || submitBttn">
-    Ingresar
-  </button>
-  <p [ngClass]="{'signup': true}">¿No tienes cuenta? Registrate <a (click)="signupUser()">aquí</a></p>
-</form>
+<div class="main-container col-sm-10 col-md-6 col-xl-4">
+  <h3 class="login-title">Inicio de Sesión</h3>
+  <form class="login-container" style="text-align:center" autocomplete="off" (ngSubmit)='submitLogin()' [formGroup]="credsForm">
+    <mat-form-field appearance="outline" MatFormFieldControl>
+      <mat-label>Correo electrónico</mat-label>
+      <input type="email" matInput (blur)="disablingBtn()" formControlName="loginAccount">
+      <mat-icon matPrefix>mail_outline</mat-icon>
+      <mat-hint color="f5f5f5">Dirección de correo electrónico asociado a la cuenta</mat-hint>
+      <mat-error *ngIf="loginAccount.hasError('email')">¡No se puede <strong>validar</strong> esta dirección de correo!</mat-error>
+      <mat-error *ngIf="loginAccount.hasError('required')">
+        La dirección de correo eletcrónico es  <strong>necesario y obligatorio!</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" MatFormFieldControl>
+      <mat-label>Contraseña</mat-label>
+      <input type="password" matInput minlength="8" (keyup)="disablingBtn()" formControlName="passwAccount">
+      <mat-icon matPrefix>vpn_key_outline</mat-icon>
+      <mat-hint>Contraseña de validación de la cuenta</mat-hint>
+      <mat-error *ngIf="passwAccount.invalid && !passwAccount.hasError('required')">
+        ¡La contraseña es inválida! Debe ser minimo de <strong>8 caracteres</strong>
+      </mat-error>
+      <mat-error *ngIf="passwAccount.hasError('required')">La contraseña no puede estar <strong>vacía!</strong></mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="accent" type="submit" [disabled]="loginAccount.invalid || passwAccount.invalid || submitBttn">
+      Ingresar
+    </button>
+    <p [ngClass]="{'signup': true}">¿No tienes cuenta? Registrate <a (click)="signupUser()">aquí</a></p>
+  </form>
+</div>

@@ -1,3 +1,32 @@
+h3 {
+  font-family: Questrial, sans-serif !important;
+  font-weight: bold !important;
+  cursor: default;
+}
+
+ul {
+  list-style: none !important;
+}
+
+a {
+  text-decoration: none !important;
+  color: whitesmoke !important;
+}
+
+.top-bar-height {
+  height: 10% !important;
+}
+
+.top-bar-corners {
+  border-radius: 0 0 5px 5px !important;
+}
+
 .icon-toolbar {
   flex: 1 1 auto !important;
+}
+
+@media screen and (max-width: 575px) {
+  li.col-3 {
+    text-align: center !important;
+  }
 }

@@ -1,9 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Questrial');
 
-html, body { height: 100%; }
-body {
-  margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif !important;
+html, body {
+  height: 100%;
+  font-family: Questrial, sans-serif !important;
 }
+body {  margin: 0; }
 
 .bckgr-login {
   background-image: linear-gradient(#00000070, #00000070), url('./assets/login-fondo.jpg');

@@ -1,4 +1,5 @@
 import { Component, Renderer2 } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, Validators, NgForm, FormGroup, FormControlName } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,7 +22,8 @@ export class LoginComponent {
   private dataService: DataService = new DataService();
   public submitBttn = true;
 
-  constructor(private bgRender: Renderer2, public userDialog: MatDialog, public barNotice: MatSnackBar) {
+  constructor(private bgRender: Renderer2, public userDialog: MatDialog,
+              public barNotice: MatSnackBar, public shopRouter: Router) {
     this.bgRender.addClass(document.body, 'bckgr-login');
   }
 
@@ -46,6 +48,7 @@ export class LoginComponent {
           barClass = 'notice-bar-success';
           this.barNotice.open('Usuario autenticado!!', '', { duration: 4000, panelClass: barClass });
           console.log(response.id + '  ----  ' + response.username);
+          this.shopRouter.navigate(['catalogo']);
           // ------------ ////// --------- //////// --------- //////////////////////////////////
         }
       });
