@@ -13,12 +13,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { DataService } from './services/data-service.service';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ShopRoutingModule } from './shop-routing.module';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { TopbarComponent } from './components/topbar/topbar.component';
 import { MainViewComponent } from './components/main-view/main-view.component';
+import { ShopCarComponent } from './components/shop-car/shop-car.component';
+import { ViewProductComponent } from './components/view-product/view-product.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { MainViewComponent } from './components/main-view/main-view.component';
     LoginComponent,
     SignupComponent,
     TopbarComponent,
-    MainViewComponent
+    MainViewComponent,
+    ShopCarComponent,
+    ViewProductComponent
   ],
   entryComponents: [
     SignupComponent
@@ -39,7 +43,7 @@ import { MainViewComponent } from './components/main-view/main-view.component';
     MatButtonModule, MatIconModule,
     MatDialogModule, MatDividerModule,
     MatSnackBarModule, MatToolbarModule,
-    AppRoutingModule
+    ShopRoutingModule
   ],
   exports: [
     MatFormFieldModule, MatInputModule,
