@@ -171,4 +171,24 @@ Router.get('/all', function(req, res) {
     }
 });
 
+// *** Obtención de todos los productos del Catalogo de la Tienda Online *** //
+Router.get('/catalog', function(req, res) {
+    let sessusr = req.session;
+    if (sessusr.username) {
+        Product.find().exec().then(docs => {
+            let prodsData = docs;
+            res.send(prodsData);
+        }).catch(error => {
+            let wrong = { msg: 'Hubo un error en la recuperación de productos!!' };
+            res.send(wrong);
+            console.log('===>> Error en la obtención de productos:  \n' + error);
+        });
+    } else {
+        let wrong = { msg: 'Cuenta de usuario no existe ó expiró la sessión!!' };
+        res.status(400).send(wrong);
+        console.log('===>> Error en la autenticación del usuario!!');
+    }
+});
+
+
 module.exports = Router;

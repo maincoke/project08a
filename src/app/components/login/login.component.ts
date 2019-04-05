@@ -1,4 +1,4 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component, Renderer2, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, Validators, NgForm, FormGroup, FormControlName } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,7 +12,7 @@ import { Creds } from '../../data-model/creds';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewChecked {
   public loginAccount = new FormControl('', [ Validators.required, Validators.email ]);
   public passwAccount = new FormControl('', [ Validators.required, Validators.minLength(8) ]);
   public credsForm: FormGroup = new FormGroup({
@@ -24,8 +24,12 @@ export class LoginComponent {
 
   constructor(private bgRender: Renderer2, public userDialog: MatDialog,
               public barNotice: MatSnackBar, public shopRouter: Router) {
+  }
+
+  ngAfterViewChecked() {
     this.bgRender.addClass(document.body, 'bckgr-login');
   }
+
 
   submitLogin() {
     if (this.credsForm.valid) {
@@ -45,10 +49,10 @@ export class LoginComponent {
           this.barNotice.open(result, '', { duration: 4000, panelClass: barClass });
         } else {
           // Enrutar hacia la pagina de productos y carrito //////// ****** ////// ****** ///////
-          barClass = 'notice-bar-success';
-          this.barNotice.open('Usuario autenticado!!', '', { duration: 4000, panelClass: barClass });
+          /*barClass = 'notice-bar-success';
+          this.barNotice.open('Usuario autenticado!!', '', { duration: 4000, panelClass: barClass });*/
           console.log(response.id + '  ----  ' + response.username);
-          this.shopRouter.navigate(['catalogo']);
+          this.shopRouter.navigate([ 'bodega/catalogo' ]);
           // ------------ ////// --------- //////// --------- //////////////////////////////////
         }
       });

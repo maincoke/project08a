@@ -1,24 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { TopbarComponent } from './components/topbar/topbar.component';
-import { ViewProductComponent } from './components/view-product/view-product.component';
-import { ShopCarComponent } from './components/shop-car/shop-car.component';
-import { PurchasesComponent } from './components/purchases/purchases.component';
+import { MainViewComponent } from './components/main-view/main-view.component';
 
-const routes: Routes = [
+const rootRoutes: Routes = [
   { path: 'inicio', component: LoginComponent },
-  { path: 'catalogo', component:  TopbarComponent },
-  { path: 'catalogo/producto', component: ViewProductComponent },
-  { path: 'catalogo/carrito', component: ShopCarComponent },
-  { path: 'catalogo/compras', component: PurchasesComponent },
+  { path: 'bodega', redirectTo: 'bodega', pathMatch: 'full' },
   { path: 'salir', redirectTo: 'inicio', pathMatch: 'full' },
   { path: '', redirectTo: 'inicio', pathMatch: 'full' }
-];
+]; // Colocar ruta no encontrada y de SALIR ---->>>>>
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  imports: [ RouterModule.forRoot(rootRoutes) ],
+  exports: [ RouterModule ],
   providers: []
 })
 export class ShopRoutingModule { }
+// , { enableTracing: true }

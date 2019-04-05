@@ -21,4 +21,8 @@ export class DataService {
     const userData = JSON.stringify(dataUser);
     return request.post(this.urlSvrData + '/newuser').type('application/json').responseType('json').send(userData);
   }
+
+  public getProducts() {
+    return request.get(this.urlSvrData + '/catalog').type('application/json').responseType('json');
+  }
 }

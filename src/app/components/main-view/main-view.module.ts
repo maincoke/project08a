@@ -1,5 +1,5 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -11,33 +11,32 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { DataService } from './services/data-service.service';
+import { DataService } from '../../services/data-service.service';
 
-import { ShopRoutingModule } from './shop-routing.module';
-import { MainViewModule } from './components/main-view/main-view.module';
+import { MainViewRoutingModule } from './main-view-routing.module';
 
-import { AppComponent } from './app.component';
-import { LoginComponent } from './components/login/login.component';
-import { SignupComponent } from './components/signup/signup.component';
+import { MainViewComponent } from './main-view.component';
+import { TopbarComponent } from './topbar/topbar.component';
+import { CatalogComponent } from './catalog/catalog.component';
+import { ViewProductComponent } from './view-product/view-product.component';
+import { ShopCarComponent } from './shop-car/shop-car.component';
+import { PurchasesComponent } from './purchases/purchases.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    LoginComponent,
-    SignupComponent
+    MainViewComponent, TopbarComponent,
+    ViewProductComponent, ShopCarComponent,
+    PurchasesComponent, CatalogComponent
   ],
-  entryComponents: [
-    SignupComponent
-   ],
   imports: [
-    BrowserModule,
+    CommonModule,
     BrowserAnimationsModule,
     ReactiveFormsModule, FormsModule,
     MatFormFieldModule, MatInputModule,
     MatButtonModule, MatIconModule,
     MatDialogModule, MatDividerModule,
     MatSnackBarModule, MatToolbarModule,
-    MainViewModule, ShopRoutingModule
+    MainViewRoutingModule
   ],
   exports: [
     MatFormFieldModule, MatInputModule,
@@ -46,7 +45,6 @@ import { SignupComponent } from './components/signup/signup.component';
     MatSnackBarModule, MatToolbarModule
   ],
   providers: [ DataService ],
-  bootstrap: [ AppComponent ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
-export class AppModule { }
+export class MainViewModule { }

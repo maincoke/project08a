@@ -1,8 +1,5 @@
 import { Component, Renderer2 } from '@angular/core';
-import { Router } from '@angular/router';
-import { TopbarComponent } from '../topbar/topbar.component';
-import { ViewProductComponent } from '../view-product/view-product.component';
-
+import { TopbarComponent } from './topbar/topbar.component';
 
 @Component({
   selector: 'app-main-view',
@@ -11,8 +8,5 @@ import { ViewProductComponent } from '../view-product/view-product.component';
 })
 export class MainViewComponent {
 
-  constructor(private shopRouter: Router) {
-    // this.shopRouter.navigate(['catalogo/productos']);
-  }
-
+  constructor() { }
 }
