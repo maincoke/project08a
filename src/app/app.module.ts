@@ -19,12 +19,14 @@ import { MainViewModule } from './components/main-view/main-view.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    LogoutComponent
   ],
   entryComponents: [
     SignupComponent

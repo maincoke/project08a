@@ -15,10 +15,19 @@ const Router = require('express').Router(),
       sessionStored = new mongoSession({ url: 'mongodb://localhost/onlineshop' }),
       BCRYPT_SALT_ROUNDS = 6;
 
+// *** Función que busca y obtiene los datos de la sesión *** //
 getSession = (sid) => {
 return sessionStored.get(sid, (error, sessusr) => {
     if (error) throw error;
     return sessusr;
+  });
+}
+
+// *** Función que elimina los datos de la sesión *** //
+clearSession = (sid) => {
+return sessionStored.destroy(sid, (error) => {
+    if (error) throw error;
+    return;
   });
 }
 
@@ -27,14 +36,10 @@ Router.post('/', function(req, res) {
   console.log(req.body);
   this.getSession(req.body.sid).then(sessusr => {
     console.log('Esta es la sessión: ====>> ' + sessusr.username);
-    console.log(sessusr);
-    // res.redirect('./catalog');
+    console.log(sessusr.id + ' -- ' + sessusr.sid);
   }).catch(error => {
     console.log('No consigue la sesión....!!!');
-    //res.redirect('/');
   });
-  /*console.log(sessusr);
-  console.log('Esta es la sessión: ====>> ' + sessusr.username);*/
   console.log('Final de consulta de Sesion ====////****');
 });
 
@@ -58,23 +63,30 @@ Router.post('/login', function(req, res) {
       }
       res.send(result);
     }).catch(error => {
-      console.error('=>>>>Error en la sesión del usuario: \n' + error);
+      console.error('=>>>> Error en la sesión del usuario: \n' + error);
     });
   }).catch(error => {
     let wrong = { access: false, msg: 'Cuenta de usuario no se encuentra registrada!!' };
     res.send(wrong);
-    console.error('=>>>>Error en la autenticación del usuario: \n' + error);
+    console.error('=>>>> Error en la autenticación del usuario: \n' + error);
   });
 });
 
-// Terminación de sesisión y salida de la App Tienda Online // ******************************************************
-Router.get('/logout', function(req, res) {
-  req.session.destroy(function(error) {
-    if (error) {
-      console.log('=>>>>Hubo un error en el cierre de la sessión!!');
-    } else {
-      res.redirect('/');
-    }
+// Terminación de sesión y salida de la App Tienda Online // ******************************************************
+Router.post('/logout', function(req, res) {
+  console.log(req.body.sid);
+  this.getSession(req.body.sid).then(sessusr => {
+    console.log('Esta es la sessión: ====>> ' + sessusr.username);
+    console.log(sessusr.id + ' -- ' + sessusr.userId);
+    this.clearSession(req.body.sid).then(resolve => {
+      if (resolve.error) { throw resolve.error; }
+      res.send(true);
+      console.log('La sesión fue cerrada..!!');
+    }).catch(error => {
+      console.log('===>>> Hubo un error en el cierre de la sessión!! \n' + error);
+    });
+  }).catch(error => {
+    console.log('No existe la SESION..!! \n ' + error);
   });
 });
 
@@ -192,23 +204,23 @@ Router.get('/shopcar', function(req, res) {
 });
 
 // *** Obtención de todos los productos del Catalogo de la Tienda Online *** //
-Router.get('/catalog', function(req, res) {
-  console.log('=========================/////====================');
-  // console.log(sessusr);
-  if (sessusr.username) {
+Router.post('/catalog', function(req, res) {
+  this.getSession(req.body.sid).then(sessusr => {
+    console.log('Esta es la sessión: ====>> ' + sessusr.username);
+    console.log(sessusr.userId);
     Product.find().exec().then(docs => {
       let prodsData = docs;
       res.send(prodsData);
     }).catch(error => {
-      let wrong = { msg: 'Hubo un error en la recuperación de productos!!' };
+      let wrong = { msgerr: 'Hubo un error en la obtención de productos!!' };
       res.send(wrong);
-      console.log('===>> Error en la obtención de productos:  \n' + error);
+      console.error('===>> Error en la obtención de productos:  \n' + error);
     });
-  } else {
-    let wrong = { msg: 'Cuenta de usuario no existe ó expiró la sessión!!' };
-    res.status(400).send();
-    console.log('===>> Error en la autenticación del usuario!!');
-  }
+  }).catch(error => {
+    let wrong = { msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' };
+    res.send(wrong);
+    console.error('===>> Error en la autenticación del usuario: \n' + error);
+  });
 });
 
 module.exports = Router;

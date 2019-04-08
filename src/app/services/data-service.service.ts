@@ -12,9 +12,14 @@ export class DataService {
   private urlSvrData = 'http://localhost:3000/shopping';
   constructor() {}
 
-  public  checkLogin(credsUser: Creds) {
+  public checkLogin(credsUser: Creds) {
     const userCreds = JSON.stringify(credsUser);
     return request.post(this.urlSvrData + '/login').type('application/json').responseType('json').send(userCreds);
+  }
+
+  public logoutApp(sidUser: string) {
+    const sid = JSON.stringify({ sid: sidUser });
+    return request.post(this.urlSvrData + '/logout').type('application/json').responseType('json').send(sid);
   }
 
   public addNewUser(dataUser: User) {
@@ -22,8 +27,8 @@ export class DataService {
     return request.post(this.urlSvrData + '/newuser').type('application/json').responseType('json').send(userData);
   }
 
-  public getProducts() {
-    const sid = JSON.stringify({ sid: sessionStorage.getItem('shopsid') });
-    return request.post(this.urlSvrData + '/').type('application/json').responseType('json').send(sid);
+  public getProducts(sidUser: string) {
+    const sid = JSON.stringify({ sid: sidUser });
+    return request.post(this.urlSvrData + '/catalog').type('application/json').responseType('json').send(sid);
   }
 }

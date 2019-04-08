@@ -30,7 +30,6 @@ export class LoginComponent implements AfterViewChecked {
     this.bgRender.addClass(document.body, 'bckgr-login');
   }
 
-
   submitLogin() {
     if (this.credsForm.valid) {
       const userCreds: Creds = new Creds();

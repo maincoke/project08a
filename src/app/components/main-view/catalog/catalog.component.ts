@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Renderer2, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { GetSidService } from '../../../services/get-sid.service';
 import { DataService } from '../../../services/data-service.service';
 
 @Component({
@@ -8,14 +11,23 @@ import { DataService } from '../../../services/data-service.service';
 })
 export class CatalogComponent implements OnInit {
   public prods: [];
-
-  constructor(private dataService: DataService) { }
+  constructor(private bgRender: Renderer2, private dataService: DataService, private userSid: GetSidService,
+              private barNotice: MatSnackBar, private shopRouter: Router) { }
 
   ngOnInit() {
-    this.dataService.getProducts().then(res => {
-      console.log(res.body);
+    const sid: string = this.userSid.sendSid();
+    this.dataService.getProducts(sid).then(res  => {
+      if (res.body.msgerr) {
+        this.barNotice.open(res.body.msgerr, '', { duration: 4000, panelClass: 'notice-bar-error' });
+        throw res.error;
+      } else {
+        this.prods = res.body;
+        console.log(this.prods);
+        // Realizar carga de Productos...!!!!
+      }
     }).catch(err => {
-      console.error(err);
+      this.shopRouter.navigate([ 'salir' ]);
     });
   }
+
 }
