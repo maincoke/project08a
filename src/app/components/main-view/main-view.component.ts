@@ -1,5 +1,4 @@
 import { Component, Renderer2 } from '@angular/core';
-import { TopbarComponent } from './topbar/topbar.component';
 
 @Component({
   selector: 'app-main-view',
@@ -8,5 +7,7 @@ import { TopbarComponent } from './topbar/topbar.component';
 })
 export class MainViewComponent {
 
-  constructor() { }
+  constructor(private bgRender: Renderer2) {
+    this.bgRender.addClass(document.body, 'bckgr-main');
+  }
 }

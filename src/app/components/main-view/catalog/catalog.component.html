@@ -1,6 +1,35 @@
-<div class="jumbotron jumbotron-fluid">
-  <div class="container">
-    <h1 class="display-4">Catalogo de Productos</h1>
-    <p class="lead">Productos de la Bodega!!</p>
+<div class="col-10 offset-1">
+  <div class="catalog col bg-light">
+    <div class="row">
+      <div class="col-9 mt-2">
+          <h2 class="mt-4">Catálogo de Productos</h2>
+      </div>
+      <div class="col-3 mt-4">
+          <span class="lead">¿Qué estás buscando?</span>
+          <mat-form-field appearance="outline">
+            <input matInput type="text" placeholder="Buscar producto">
+          </mat-form-field>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="row">
+      <div class="col-xl-3 col-lg-3 col-md-4 col-sm-2 col-1 mt-2">
+        <mat-card class="product shadow">
+          <mat-card-header>
+            <mat-card-title><b class="text-capitalize">aguacate</b></mat-card-title>
+          </mat-card-header>
+          <img mat-card-image src="../../../../assets/aguacate.jpg" alt="aguacate" class="img-product pl-2 pr-2">
+          <mat-card-content>
+            <p>Precio: 3$</p>
+            <p>Unidades disponibles: 74</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="primary">Ver más</button>
+            <input type="number" class="align-bottom position-relative float-right pl-2" [value]="1" [min]="1" [max]="30" [ngStyle]="{'width.em': 3, 'height.em': 2, 'border-radius.px': 5}">
+            <button mat-raised-button color="accent" class="position-relative float-right">Añadir</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
   </div>
 </div>

@@ -25,4 +25,3 @@ $project08a-theme: mat-light-theme($project08a-primary, $project08a-accent, $pro
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($project08a-theme);
-

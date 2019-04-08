@@ -9,9 +9,9 @@ const path = require('path'),
     session = require('express-session'),
     cors = require('cors');
     genuuid = require('uuid/v4'),
-    levelSession = require('level-session-store')(session),
-    bodyParser = require('body-parser'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    mongoSession = require('connect-mongo')(session);
+    bodyParser = require('body-parser');
 
 /* Configuración de instancias y variables del Servidor */
 const PORT = 3000;
@@ -28,7 +28,7 @@ db.once('open', function() {
 });
 
 /* Uso de libreria para el manejo de sesion */
-shop.use(session({
+const userSession = session({
     genid: function(req) {
         return genuuid();
     },
@@ -38,8 +38,9 @@ shop.use(session({
     rolling: true,
     saveUninitialized: false,
     cookie: { maxAge: 1200000 },
-    store: new levelSession('./user/session/shopper')
-}));
+    store: new mongoSession({ mongooseConnection: db })
+});
+shop.use(userSession);
 
 /* Uso de instancia de servidor para configurar enrutador de funciones y contenido body-parser */
 // shop.use(express.static('../client'));

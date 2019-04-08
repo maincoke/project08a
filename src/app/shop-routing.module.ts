@@ -16,4 +16,3 @@ const rootRoutes: Routes = [
   providers: []
 })
 export class ShopRoutingModule { }
-// , { enableTracing: true }

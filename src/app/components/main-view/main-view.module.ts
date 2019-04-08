@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
 
 import { DataService } from '../../services/data-service.service';
 
@@ -36,13 +37,14 @@ import { PurchasesComponent } from './purchases/purchases.component';
     MatButtonModule, MatIconModule,
     MatDialogModule, MatDividerModule,
     MatSnackBarModule, MatToolbarModule,
-    MainViewRoutingModule
+    MatCardModule, MainViewRoutingModule
   ],
   exports: [
     MatFormFieldModule, MatInputModule,
     MatButtonModule, MatIconModule,
     MatDividerModule, MatDialogModule,
-    MatSnackBarModule, MatToolbarModule
+    MatSnackBarModule, MatToolbarModule,
+    MatCardModule
   ],
   providers: [ DataService ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]

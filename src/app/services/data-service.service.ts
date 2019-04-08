@@ -23,6 +23,7 @@ export class DataService {
   }
 
   public getProducts() {
-    return request.get(this.urlSvrData + '/catalog').type('application/json').responseType('json');
+    const sid = JSON.stringify({ sid: sessionStorage.getItem('shopsid') });
+    return request.post(this.urlSvrData + '/').type('application/json').responseType('json').send(sid);
   }
 }

@@ -1,9 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css?family=Questrial');
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
 
 html, body {
   height: 100%;
-  font-family: Questrial, sans-serif !important;
+  font-family: 'Josefin Sans', sans-serif !important;
 }
 body {  margin: 0; }
 

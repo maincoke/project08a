@@ -1,5 +1,4 @@
-import { Component, Renderer2 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-topbar',
@@ -8,8 +7,6 @@ import { Router } from '@angular/router';
 })
 export class TopbarComponent {
 
-  constructor(private bgRender: Renderer2) {
-    this.bgRender.addClass(document.body, 'bckgr-main');
-  }
+  constructor() { }
 
 }
