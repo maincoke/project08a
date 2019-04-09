@@ -38,7 +38,7 @@ Router.post('/', function(req, res) {
     console.log('Esta es la sessión: ====>> ' + sessusr.username);
     console.log(sessusr.id + ' -- ' + sessusr.sid);
   }).catch(error => {
-    console.log('No consigue la sesión....!!!');
+    console.error('No consigue la sesión....!!!');
   });
   console.log('Final de consulta de Sesion ====////****');
 });
@@ -55,11 +55,10 @@ Router.post('/login', function(req, res) {
       } else {
         req.session.regenerate(error => { if (error) throw console.error(error) });
         let sessusr = req.session;
-        console.log(sessusr);
         sessusr.username = username;
         sessusr.userId = doc._id;
+        console.log(sessusr);
         result = { access: true, id: doc._id, username: doc.emailusr, sid: req.sessionID };
-        console.log(result);
       }
       res.send(result);
     }).catch(error => {
@@ -83,10 +82,10 @@ Router.post('/logout', function(req, res) {
       res.send(true);
       console.log('La sesión fue cerrada..!!');
     }).catch(error => {
-      console.log('===>>> Hubo un error en el cierre de la sessión!! \n' + error);
+      console.error('===>>> Hubo un error en el cierre de la sessión!! \n' + error);
     });
   }).catch(error => {
-    console.log('No existe la SESION..!! \n ' + error);
+    console.error('No existe la SESION..!! \n ' + error);
   });
 });
 
@@ -188,25 +187,29 @@ Router.post('/update', function(req, res) {
 
 // Obtención de todos los productos del Carrito del usuario la Tienda Online // ***************************************
 Router.get('/shopcar', function(req, res) {
-    let sessusr = req.session;
-    if (sessusr.username) {
-        User.findOne({ emailusr: sessusr.username }).exec().then(doc => {
-            let datauser = { username: doc.emailusr, productos: doc.shopcar.paidod };
-            res.send(datauser);
-        }).catch(error => {
-            let wrong = { msg: 'Cuenta de usuario no existe ó expiró la sessión!!' };
-            res.send(wrong);
-            console.log('Error en la autenticación del usuario: ');
-        });
-    } else {
-        res.status(400).send();
-    }
+  this.getSession(req.body.sid).then(sessusr => {
+    console.log('Esta es la cuenta-session: ====>> ' + sessusr.username);
+    console.log(sessusr.userId);
+    User.findOne({ emailusr: sessusr.username }).exec().then(doc => {
+      // Reparar Query --->>
+      let dataCar = { username: doc.emailusr, productos: doc.shopcar.paidod };
+      res.send(dataCar);
+    }).catch(error => {
+      let wrong = { msgerr: 'Hubo un error en obtener los productos del carrito!!' };
+      res.send(wrong);
+      console.error('===>> Error en la consulta del carrito:  \n' + error);
+    });
+  }).catch(error => {
+    let wrong = { msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' };
+    res.send(wrong);
+    console.error('===>> Error en la autenticación del usuario: \n' + error);
+  });
 });
 
 // *** Obtención de todos los productos del Catalogo de la Tienda Online *** //
 Router.post('/catalog', function(req, res) {
   this.getSession(req.body.sid).then(sessusr => {
-    console.log('Esta es la sessión: ====>> ' + sessusr.username);
+    console.log('Esta es la cuenta-session: ====>> ' + sessusr.username);
     console.log(sessusr.userId);
     Product.find().exec().then(docs => {
       let prodsData = docs;

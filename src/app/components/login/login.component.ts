@@ -39,6 +39,7 @@ export class LoginComponent implements AfterViewChecked {
       let response: any; let result: any; let barClass: any;
       loginChk.then(res => {
         response = res.body;
+        sessionStorage.setItem('shopsid', response.sid);
       }).catch(err => {
         console.log(err);
       }).finally(() => {
@@ -51,9 +52,7 @@ export class LoginComponent implements AfterViewChecked {
           /*barClass = 'notice-bar-success';
           this.barNotice.open('Usuario autenticado!!', '', { duration: 4000, panelClass: barClass });*/
           // console.log(response.id + '  ----  ' + response.username + ' --- ' + response.sid);
-          sessionStorage.setItem('shopsid', response.sid);
           this.shopRouter.navigate([ 'bodega/catalogo' ]);
-          // ------------ ////// --------- //////// --------- //////////////////////////////////
         }
       });
     }

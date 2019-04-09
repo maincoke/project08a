@@ -4,10 +4,12 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class GetSidService {
-  private userSid: string = sessionStorage.getItem('shopsid') != null ? sessionStorage.getItem('shopsid') : null;
+  private userSid: string;
   constructor() { }
 
   sendSid() {
+    this.userSid = sessionStorage.getItem('shopsid') !== null && sessionStorage.getItem('shopsid') !== undefined ?
+                  sessionStorage.getItem('shopsid') : null;
     return this.userSid;
   }
 

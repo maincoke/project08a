@@ -36,3 +36,8 @@ button {
 :host /deep/ mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
   padding-top: 4px !important;
 }
+
+img.img-product {
+  width: auto !important;
+  height: 150px !important;
+}

@@ -2,6 +2,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FilterPipeModule } from 'ngx-filter-pipe';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,7 +38,8 @@ import { PurchasesComponent } from './purchases/purchases.component';
     MatButtonModule, MatIconModule,
     MatDialogModule, MatDividerModule,
     MatSnackBarModule, MatToolbarModule,
-    MatCardModule, MainViewRoutingModule
+    MatCardModule, MainViewRoutingModule,
+    FilterPipeModule
   ],
   exports: [
     MatFormFieldModule, MatInputModule,
