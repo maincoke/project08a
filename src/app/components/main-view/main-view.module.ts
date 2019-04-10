@@ -14,6 +14,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 
 import { DataService } from '../../services/data-service.service';
+import { ProdSearchPipe } from '../../services/prod-search.pipe';
 
 import { MainViewRoutingModule } from './main-view-routing.module';
 
@@ -28,7 +29,8 @@ import { PurchasesComponent } from './purchases/purchases.component';
   declarations: [
     MainViewComponent, TopbarComponent,
     ViewProductComponent, ShopCarComponent,
-    PurchasesComponent, CatalogComponent
+    PurchasesComponent, CatalogComponent,
+    ProdSearchPipe
   ],
   imports: [
     CommonModule,

@@ -1,34 +1,41 @@
 <div class="col-10 offset-1">
   <div class="catalog col bg-light">
     <div class="row">
-      <div class="col-9 mt-2">
+      <div class="col-xl-9 col-lg-8 col-md-6 col-12 mt-2">
           <h2 class="mt-4">Catálogo de Productos</h2>
       </div>
-      <div class="col-3 mt-4">
+      <div class="col-xl-3 col-lg-4 col-md-6 col-12 mt-4">
           <span class="lead">¿Qué estás buscando?</span>
           <mat-form-field appearance="outline">
-            <input matInput type="text" placeholder="Buscar producto" name="schprod" [(ngModel)]="prodSearcher"
+            <input matInput type="text" placeholder="Buscar producto" name="schprod" [(ngModel)]="prodSearcher.name"
               autocomplete="off">
           </mat-form-field>
       </div>
     </div>
     <mat-divider></mat-divider>
     <div class="row">
-      <div class="col-xl-3 col-lg-3 col-md-4 col-sm-2 col-1 mt-2"
-          *ngFor="let prod of products | filterBy: prodSearcher">
-        <mat-card class="product shadow">
+      <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-12 mt-2 p-2"
+          *ngFor="let prod of products | prodSearch: prodSearcher" >
+          <!--  | filterBy: prodSearcher-->
+        <mat-card class="product shadow p-1">
           <mat-card-header>
             <mat-card-title><b class="text-capitalize">{{ prod.name }}</b></mat-card-title>
           </mat-card-header>
-          <div><img mat-card-image src="{{ prod.image }}" alt="aguacate" class="img-product pl-2 pr-2"></div>
+          <div class="img-product">
+            <img src="{{ prod.image }}" alt="aguacate" class="pt-1 pb-1">
+          </div>
           <mat-card-content>
             <p>Precio: {{ prod.price }}$</p>
             <p>Unidades disponibles: {{ prod.stock }}</p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-raised-button color="primary">Ver más</button>
-            <input type="number" class="align-bottom position-relative float-right pl-2" [value]="1" [min]="1" [max]="30" [ngStyle]="{'width.em': 3, 'height.em': 2, 'border-radius.px': 5}">
-            <button mat-raised-button color="accent" class="position-relative float-right">Añadir</button>
+              <div class="col-xl-3 col-lg-3 p-1">
+                <button mat-raised-button color="primary" class="view-more">Ver más</button>
+              </div>
+              <div class="col-xl-9 col-lg-9 p-1">
+                <button mat-raised-button color="accent" class="">Añadir</button>
+                <input type="number" class="align-bottom pl-2" [value]="1" [min]="1" [max]="30" [ngStyle]="{'width.em': 3, 'height.em': 2, 'border-radius.px': 5}">
+              </div>
           </mat-card-actions>
         </mat-card>
         <!--p> {{ prod }}</p-->

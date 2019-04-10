@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { GetSidService } from '../../../services/get-sid.service';
 import { DataService } from '../../../services/data-service.service';
+import { ProdSearchPipe} from '../../../services/prod-search.pipe';
 import { Product } from '../../../data-model/product';
 
 @Component({
@@ -11,8 +12,9 @@ import { Product } from '../../../data-model/product';
   styleUrls: ['./catalog.component.css']
 })
 export class CatalogComponent implements OnInit {
-  public products: Array<Product>;
-  public prodSearcher: string;
+  public products: Product[];
+  public prodSearcher: Product = new Product();
+  public prodFilter: ProdSearchPipe;
   constructor(private dataService: DataService, private userSid: GetSidService,
               private barNotice: MatSnackBar, private shopRouter: Router) { }
 
@@ -33,4 +35,7 @@ export class CatalogComponent implements OnInit {
     });
   }
 
+  prodName(idx: number, prod: Product ) {
+    return prod.name;
+  }
 }
