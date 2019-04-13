@@ -25,8 +25,8 @@ export class CatalogComponent implements OnInit {
         this.barNotice.open(res.body.msgerr, '', { duration: 4000, panelClass: 'notice-bar-error' });
         throw res.error;
       } else {
+        this.prodSearcher.name = '';
         this.products = res.body;
-        // console.log(this.products);
         // Realizar carga de Productos...!!!!
       }
     }).catch(err => {
@@ -35,7 +35,8 @@ export class CatalogComponent implements OnInit {
     });
   }
 
-  prodName(idx: number, prod: Product ) {
-    return prod.name;
+  viewMoreClick(idProd: string) {
+    console.log('Este es el producto: \n' + idProd);
   }
+
 }

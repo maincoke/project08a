@@ -31,4 +31,9 @@ export class DataService {
     const sid = JSON.stringify({ sid: sidUser });
     return request.post(this.urlSvrData + '/catalog').type('application/json').responseType('json').send(sid);
   }
+
+  public getShowProduct(sidUser: string, prodId: string) {
+    const sid = JSON.stringify({ sid: sidUser });
+    return request.post(this.urlSvrData + '/product/' + prodId).type('application/json').responseType('json').send(sid);
+  }
 }

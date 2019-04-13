@@ -8,7 +8,8 @@ const rootRoutes: Routes = [
   { path: 'bodega', redirectTo: 'bodega', pathMatch: 'full' },
   { path: 'salir', component: LogoutComponent },
   { path: '', redirectTo: 'inicio', pathMatch: 'full' }
-]; // Colocar ruta no encontrada y de SALIR ---->>>>>
+  // { path: '**', redirectTo: 'bodega/catalogo' }
+];
 
 @NgModule({
   imports: [ RouterModule.forRoot(rootRoutes) ],

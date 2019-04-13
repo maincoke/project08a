@@ -25,6 +25,12 @@ mat-card-title b {
   font-size: 1.5rem !important;
 }
 
+mat-card-actions {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+
 button {
   font-weight: bold !important;
   color: whitesmoke !important;
@@ -52,6 +58,24 @@ button {
   width: auto;
 }
 
-.view-more {
-  width: 100% !important;
+.btn-flex {
+  display: flex;
+  flex-direction: column;
+  flex-flow: row;
+}
+
+.view-more-btn {
+  width: 100%;
+}
+
+.add-car-btn {
+  width: 65%;
+  height: auto;
+}
+
+.input-stock {
+  border-radius: 5px;
+  width: 35%;
+  height: 2.2rem;
+  align-self: flex-end;
 }

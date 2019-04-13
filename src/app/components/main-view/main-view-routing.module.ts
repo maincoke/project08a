@@ -11,7 +11,7 @@ const childRoutes: Routes = [
       { path: 'catalogo', component: CatalogComponent },
       { path: 'carrito', component: ShopCarComponent },
       { path: 'compras', component: PurchasesComponent },
-      { path: 'producto:id', component: ViewProductComponent }
+      { path: 'producto/:id', component: ViewProductComponent }
     ] }
 ];
 
