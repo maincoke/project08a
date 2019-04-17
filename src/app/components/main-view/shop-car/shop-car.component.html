@@ -4,6 +4,12 @@
     <p class="lead">Contenido del Carrito!!</p>
   </div>
   <p>
-    {{ shopCarData.shopCar.order }}
-  </p>
+    {{ shopCarData.shopCar.products }}
+  </p><hr>
+  <div *ngFor="let itemProd of shopCarData.shopCar.products">
+    <p>{{ itemProd.id }}</p>
+    <p>{{ itemProd.price }}</p>
+    <p>{{ itemProd.quantt }}</p>
+  </div>
+
 </div>

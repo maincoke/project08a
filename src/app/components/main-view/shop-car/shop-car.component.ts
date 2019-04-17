@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { GetSidService } from '../../../services/get-sid.service';
-import { DataService } from '../../../services/data-service.service';
+// import { DataService } from '../../../services/data-service.service';
 import { ShopCarService } from '../../../services/shop-car.service';
 import { Product } from '../../../data-model/product';
 import { ShopCar } from '../../../data-model/shop-car';
@@ -13,7 +13,7 @@ import { ShopCar } from '../../../data-model/shop-car';
   styleUrls: ['./shop-car.component.css']
 })
 export class ShopCarComponent implements OnInit {
-  constructor(private dataService: DataService, private userSid: GetSidService, public shopCarData: ShopCarService,
+  constructor(private userSid: GetSidService, public shopCarData: ShopCarService,
               private barNotice: MatSnackBar, private shopRouter: Router) { }
 
   ngOnInit() {

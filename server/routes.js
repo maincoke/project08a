@@ -191,7 +191,7 @@ Router.post('/shopcar', function(req, res) {
       if (doc.shopcar[0].products.length != 0) {
         dataCar.shopcarProds =  doc.shopcar[0].products;
       } else {
-        dataCar.shopcarProds =  [];
+        dataCar.shopcarProds =  new Array;
       }
       console.log(doc.shopcar[0].products.length);
       res.send(dataCar);

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DataService } from './data-service.service';
 import { ShopCar } from '../data-model/shop-car';
-// import { GetSidService } from './get-sid.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,6 @@ export class ShopCarService {
   getShopCarData(sid: string) {
     this.dataService.getShopCarProds(sid).then(res  => {
       if (res.body.msgerr) {
-        // this.error = true;
         this.msgerr = res.body.msgerr;
         console.log(this.msgerr);
         throw res.error;
@@ -27,10 +25,32 @@ export class ShopCarService {
         this.userCar = res.body.username;
         this.shopCar.order = res.body.order;
         this.shopCar.paidod = res.body.paidod;
-        this.shopCar.products = res.body.shopCarProds;
+        if (res.body.shopCarProds === undefined) {
+          console.log('Array vacio---->>');
+          this.shopCar.products = [{ id: '', price: 0, quantt: 0 }];
+        } else {
+          this.shopCar.products = res.body.shopCarProds;
+        }
+        console.log(this.shopCar);
       }
     }).catch(err => {
+      console.error(err);
       this.error = true;
     });
+  }
+
+  pushProduct2Car(idProd: string, prcProd: number, qtProd: number) {
+    console.log(this.shopCar);
+    const prodCar = { id: idProd, price: prcProd, quantt: qtProd };
+    try {
+      const findIt = this.shopCar.findProduct(idProd);
+      if (findIt < 0 || this.shopCar.products === undefined) {
+        this.shopCar.addProduct(prodCar);
+      } else {
+        this.shopCar.updProduct(idProd, prcProd, qtProd);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
