@@ -1,9 +1,9 @@
-import { Injectable, Inject, Component } from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as request from 'superagent';
 import { User } from '../data-model/user';
 import { Creds } from '../data-model/creds';
-import { ShopCar } from '../data-model/shop-car';
-import { Product } from '../data-model/product';
+// import { ShopCar } from '../data-model/shop-car';
+// import { Product } from '../data-model/product';
 
 @Injectable({
   providedIn: 'root'
@@ -35,5 +35,10 @@ export class DataService {
   public getShowProduct(sidUser: string, prodId: string) {
     const sid = JSON.stringify({ sid: sidUser });
     return request.post(this.urlSvrData + '/product/' + prodId).type('application/json').responseType('json').send(sid);
+  }
+
+  public getShopCarProds(sidUser: string) {
+    const sid = JSON.stringify({ sid: sidUser });
+    return request.post(this.urlSvrData + '/shopcar').type('application/json').responseType('json').send(sid);
   }
 }

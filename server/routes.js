@@ -119,7 +119,7 @@ Router.post('/newuser', function(req, res) {
   });
 });
 
-// *** Inclusión de un nuevo producto al carrito de compras del usuario *** //
+// *** Inclusión de un nuevo producto al carrito de compras del usuario ************************************************** //
 Router.post('/newproduct/:id', function(req, res) {
     let sessusr = req.session;
     if (sessusr.username) {
@@ -181,14 +181,21 @@ Router.post('/update', function(req, res) {
     }
 });
 
-// Obtención de todos los productos del Carrito del usuario la Tienda Online // ***************************************
-Router.get('/shopcar', function(req, res) {
+// *** Obtención de todos los productos del Carrito del usuario la Tienda Online *** //
+Router.post('/shopcar', function(req, res) {
   this.getSession(req.body.sid).then(sessusr => {
-    User.findOne({ emailusr: sessusr.username }).exec().then(doc => {
+    User.findOne({ emailusr: sessusr.username, "shopcar.paidod": false }).exec().then(doc  => {
       // Reparar Query --->>
-      let dataCar = { username: doc.emailusr, productos: doc.shopcar.paidod };
+      console.log(doc.shopcar[0].order);
+      let dataCar = { username: doc.emailusr, order: doc.shopcar[0].order, paidod: doc.shopcar[0].paidod };
+      if (doc.shopcar[0].products.length != 0) {
+        dataCar.shopcarProds =  doc.shopcar[0].products;
+      } else {
+        dataCar.shopcarProds =  [];
+      }
+      console.log(doc.shopcar[0].products.length);
       res.send(dataCar);
-    }).catch(error => {
+    }).catch(error  => {
       let wrong = { msgerr: 'Hubo un error en obtener los productos del carrito!!' };
       res.send(wrong);
       console.error('===>> Error en la consulta del carrito:  \n' + error);

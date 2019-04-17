@@ -4,7 +4,9 @@ import { Router } from '@angular/router';
 import { GetSidService } from '../../../services/get-sid.service';
 import { DataService } from '../../../services/data-service.service';
 import { ProdSearchPipe} from '../../../services/prod-search.pipe';
+import { ShopCarComponent } from '../shop-car/shop-car.component';
 import { Product } from '../../../data-model/product';
+import { ShopCar } from '../../../data-model/shop-car';
 
 @Component({
   selector: 'app-catalog',
@@ -15,6 +17,7 @@ export class CatalogComponent implements OnInit {
   public products: Product[];
   public prodSearcher: Product = new Product();
   public prodFilter: ProdSearchPipe;
+  // public shopCar: ShopCar = ShopCarComponent.prototype.shopCar;
   constructor(private dataService: DataService, private userSid: GetSidService,
               private barNotice: MatSnackBar, private shopRouter: Router) { }
 
@@ -35,8 +38,7 @@ export class CatalogComponent implements OnInit {
     });
   }
 
-  viewMoreClick(idProd: string) {
-    console.log('Este es el producto: \n' + idProd);
+  addProduct2Car(idProd: any, qtProd: any) {
+    console.log(idProd._id + '\n' + idProd.name + '\n' + idProd.price + '\n' + qtProd.value);
   }
-
 }

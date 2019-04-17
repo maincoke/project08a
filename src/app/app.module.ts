@@ -12,6 +12,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { DataService } from './services/data-service.service';
+import { ShopCarService } from 'src/app/services/shop-car.service';
 
 import { ShopRoutingModule } from './shop-routing.module';
 import { MainViewModule } from './components/main-view/main-view.module';
@@ -47,7 +48,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     MatDividerModule, MatDialogModule,
     MatSnackBarModule, MatToolbarModule
   ],
-  providers: [ DataService ],
+  providers: [ DataService, ShopCarService ],
   bootstrap: [ AppComponent ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
