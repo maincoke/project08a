@@ -17,7 +17,6 @@ export class CatalogComponent implements OnInit {
   public products: Product[];
   public prodSearcher: Product = new Product();
   public prodFilter: ProdSearchPipe;
-  // public shopCar: ShopCar = ShopCarComponent.prototype.shopCar;
   constructor(private dataService: DataService, private userSid: GetSidService, private barNotice: MatSnackBar,
               private shopRouter: Router, public shopCarData: ShopCarService) { }
 
@@ -31,6 +30,16 @@ export class CatalogComponent implements OnInit {
         this.prodSearcher.name = '';
         this.products = res.body;
         // Realizar carga de Productos...!!!!
+        this.shopCarData.getShopCarData(sid);
+        if (!this.shopCarData.error) {
+          console.log(this.shopCarData.error + ' - ' + sid);
+        } else {
+          console.log(this.shopCarData.error);
+          if (this.shopCarData.msgerr) {
+            this.barNotice.open(this.shopCarData.msgerr, '', { duration: 4000, panelClass: 'notice-bar-error' });
+          }
+          throw res.error;
+        }
       }
     }).catch(err => {
       if (sid != null) { this.userSid.clearSid(); }
@@ -40,6 +49,7 @@ export class CatalogComponent implements OnInit {
 
   addProduct2Car(prod: any, qtProd: any) {
     console.log(prod._id + '\n' + prod.name + '\n' + prod.price + '\n' + qtProd.value);
-    this.shopCarData.pushProduct2Car(prod._id, prod.price, qtProd.value);
+    const sid: string = this.userSid.sendSid();
+    this.shopCarData.pushProduct2Car(sid, prod._id, prod.price, qtProd.value);
   }
 }

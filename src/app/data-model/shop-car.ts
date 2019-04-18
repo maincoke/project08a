@@ -1,5 +1,5 @@
 export class ShopCar {
-  public order: number;
+  public order: string;
   public paidod: boolean;
   public products: [{
     id: string;
@@ -11,19 +11,12 @@ export class ShopCar {
     return this.products.findIndex((prod: { id: string, price: number, quantt: number}) => prod.id === idProd);
   }
 
-  addProduct(prod: { id: string, price: number, quantt: number }) {
-    return this.products.push(prod);
-  }
+  addProduct(prod: { id: string, price: number, quantt: number }) { return this.products.push(prod); }
 
-  delProduct(idProd: string) {
-    const idxProd = this.findProduct(idProd);
-    // this.products.findIndex((prod: { id: string, price: number, quantt: number}) => prod.id === idProd);
-    return this.products.splice(idxProd, 1);
-  }
+  delProduct(idxProd: number) { return this.products.splice(idxProd, 1); }
 
-  updProduct(idProd: string, newPrc: number, newQtt: number) {
-    const idxProd = this.findProduct(idProd);
-    this.products[idxProd].quantt = this.products[idProd].quantt !== newQtt ? newQtt : this.products[idProd].quantt;
-    this.products[idxProd].price = this.products[idProd].price !== newPrc ? newPrc : this.products[idProd].price;
+  updProduct(idxProd: number, newPrc: number, newQtt: number) {
+    this.products[idxProd].quantt = this.products[idxProd].quantt !== newQtt ? newQtt : this.products[idxProd].quantt;
+    this.products[idxProd].price = this.products[idxProd].price !== newPrc ? newPrc : this.products[idxProd].price;
   }
 }

@@ -31,7 +31,7 @@ return sessionStored.destroy(sid, (error) => {
   });
 }
 
-// Verificación y regeneración de sesión del Usuario // ***********************************************************
+// Verificación y regeneración de sesión del Usuario // ************************************************************************
 Router.post('/', function(req, res) {
   console.log(req.body);
   this.getSession(req.body.sid).then(sessusr => {
@@ -73,7 +73,7 @@ Router.post('/login', function(req, res) {
 Router.post('/logout', function(req, res) {
   console.log(req.body.sid);
   this.getSession(req.body.sid).then(sessusr => {
-    console.log(sessusr.id + ' -- ' + sessusr.userId);
+    console.log(sessusr.username + ' -- ' + sessusr.userId);
     this.clearSession(req.body.sid).then(resolve => {
       if (resolve.error) { throw resolve.error; }
       res.send(true);
@@ -119,81 +119,90 @@ Router.post('/newuser', function(req, res) {
   });
 });
 
-// *** Inclusión de un nuevo producto al carrito de compras del usuario ************************************************** //
-Router.post('/newproduct/:id', function(req, res) {
-    let sessusr = req.session;
-    if (sessusr.username) {
-        User.findOne({ identusr: sessusr.userId }).exec().then(doc => {
-            let product = req.body;
-            //product.id = new objectId;
-            doc.shopcar.push(product);
-            doc.save().then((shpusr) => {
-                let success = { id: product.name, msg: "Evento agendado con éxito!!" };
-                res.send(success);
-            }).catch(error => {
-                let wrong = { msg: 'Hubo un error en el registro del evento!!' };
-                res.send(wrong);
-                console.log('Error en la inclusión del evento: ');
-            });
-        }).catch(error => {
-            let wrong = { msg: 'Cuenta de usuario no existe ó expiró la sessión!!' };
-            res.send(wrong);
-            console.log('Error en la autenticación del usuario: ');
-        });
-    } else {
-        res.status(400).send();
-    }
+// *** Inclusión de un nuevo producto al carrito de compras del usuario *** //
+Router.post('/newprod', function(req, res) {
+  this.getSession(req.body.sid).then(sessusr => {
+    console.log(sessusr.username + ' -- ' + sessusr.sid);
+    const product = req.body.prod;
+    User.updateOne({ emailusr: sessusr.username, "shopcar.order": req.body.order, "shopcar.paidod": false },
+      { "$push": { "shopcar.$.products": product }}, (error, doc) => {
+      console.log(product);
+      if (!error) {
+        let success = { id: product.id, msgscs: "Producto agregado al carrito!!" };
+        res.send(success);
+      } else {
+        let wrong = { msgerr: 'Hubo un error al agregar el producto!!' };
+        res.send(wrong);
+        console.log('Error en la inclusión del producto: \n' + error);
+      }
+    });
+  }).catch(error => {
+    let wrong = { msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' };
+    res.send(wrong);
+    console.log('Error en la autenticación del usuario: \n' + error);
+  });
 });
 
-// Eliminación de un producto en el Carrito del Usuario en la Tienda Online // ****************************************
-Router.post('/deleteproduct/:id', function(req, res) {
-    let sessusr = req.session;
-    if (sessusr.username) {
-        User.findOneAndUpdate({ _id: sessusr.userId }, { $pull: { products: { id: req.params._id } } }, (error, doc) => {
-            if (!error) {
-                let scheduleDoc = doc.schedule;
-                let eventdel = scheduleDoc.findIndex(evt => evt.id == req.params.id);
-                res.send("El evento:\n [ " + scheduleDoc[eventdel].title + " ],\nfue borrado con éxito!!");
-            } else {
-                res.send("Hubo un error al borrar el evento!!");
-                console.log('Error en la eliminación del evento: ');
-            }
-        });
-    } else {
-        res.status(400).send();
-    }
+// *** Actualización de cantidad y precio de un producto en el Carrito del Usuario en la Tienda Online *** //
+Router.post('/updateprod/:id', function(req, res) {
+  this.getSession(req.body.sid).then(sessusr => {
+    console.log(sessusr.username + ' -- ' + sessusr.sid);
+    const idx = req.body.idx,
+          idProd = req.params.id;
+    const setPrc = req.body.price;
+    const pptPrc = "shopcar.$.products." + idx.toString() + ".price";
+    const setQtt = req.body.quantt;
+    const pptQtt = "shopcar.$.products." + idx.toString() + ".quantt";
+    const updateSet = new Object({ [pptPrc]: setPrc, [pptQtt]: setQtt });
+    console.log(updateSet + '-- ' + idx);
+    User.update({ emailusr: sessusr.username, "shopcar.paidod": false, "shopcar.products.id": objectId(idProd) },
+    { $set: updateSet }, (error, doc) => {
+      if (!error) {
+         res.send({ msgscs: 'Cantidad y precio actualizados con éxito!!'});
+         console.log('####>>> Exito en la actualización!!');
+         console.log(doc);
+      } else {
+        res.send({ msgerr: 'Hubo un error al actualizar los datos del producto!!'});
+        console.error('===>>> Error en la actualización del producto en el carrito: \n' + error);
+      }
+    });
+  }).catch(error => {
+    res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
+    console.error('Error en la autenticación del usuario: \n' + error);
+  });
 });
 
-// Actualización de cantidad de un producto en el Carrito del Usuario en la Tienda Online // ***************************
-Router.post('/update', function(req, res) {
-    let sessusr = req.session;
-    if (sessusr.username) {
-        User.findOneAndUpdate({ identusr: sessusr.userId, "schedule.id": req.body.id }, { $set: { 'schedule.$.start': req.body.start, 'schedule.$.end': req.body.end } }, (error, doc) => {
-            if (!error) {
-                res.send("El evento fue reagendado y actualizado con éxito!!");
-            } else {
-                res.send("Hubo un error al actualizar el evento!!");
-                console.log('Error en la actualización del evento: ');
-            }
-        });
-    } else {
-        res.status(400).send();
-    }
+// Eliminación de un producto en el Carrito del Usuario en la Tienda Online // **************************************************
+Router.post('/deleteprod/:id', function(req, res) {
+  this.getSession(req.body.sid).then(sessusr => {
+    console.log(sessusr.username + ' -- ' + sessusr.sid);
+    User.findOneAndUpdate({ emailusr: sessusr.username, "shopcar.paidod": false, "shopcar.products.id": req.params.id },
+      { $set: { "shopcar.products.$.price": req.body.prodPrc, "shopcar.products.$.quantt": req.body.prodQtt }}, (error, doc) => {
+      if (!error) {
+         res.send({ msgscs: 'Cantidad y precio actualizados con éxito!!'});
+      } else {
+        res.send({ msgerr: 'Hubo un error al actualizar los datos del producto!!'});
+        console.error('===>>> Error en la actualización del producto en el carrito: \n' + error);
+      }
+    });
+  }).catch(error => {
+    res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
+    console.log('Error en la autenticación del usuario: \n' + error);
+  });
 });
 
 // *** Obtención de todos los productos del Carrito del usuario la Tienda Online *** //
 Router.post('/shopcar', function(req, res) {
   this.getSession(req.body.sid).then(sessusr => {
     User.findOne({ emailusr: sessusr.username, "shopcar.paidod": false }).exec().then(doc  => {
-      // Reparar Query --->>
-      console.log(doc.shopcar[0].order);
+      // Reparar Query ///////////////////////////////////////////////--->>
       let dataCar = { username: doc.emailusr, order: doc.shopcar[0].order, paidod: doc.shopcar[0].paidod };
       if (doc.shopcar[0].products.length != 0) {
         dataCar.shopcarProds =  doc.shopcar[0].products;
       } else {
         dataCar.shopcarProds =  new Array;
       }
-      console.log(doc.shopcar[0].products.length);
+      // console.log(doc.shopcar[0].products.length);
       res.send(dataCar);
     }).catch(error  => {
       let wrong = { msgerr: 'Hubo un error en obtener los productos del carrito!!' };

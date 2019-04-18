@@ -9,6 +9,7 @@ export class ShopCarService {
   public userCar: string;
   public error = false;
   public msgerr: string;
+  public msgscs: string;
   public shopCar: ShopCar = new ShopCar();
 
   constructor(private dataService: DataService) { }
@@ -25,29 +26,42 @@ export class ShopCarService {
         this.userCar = res.body.username;
         this.shopCar.order = res.body.order;
         this.shopCar.paidod = res.body.paidod;
-        if (res.body.shopCarProds === undefined) {
-          console.log('Array vacio---->>');
-          this.shopCar.products = [{ id: '', price: 0, quantt: 0 }];
-        } else {
-          this.shopCar.products = res.body.shopCarProds;
-        }
-        console.log(this.shopCar);
+        this.shopCar.products = res.body.shopcarProds !== undefined ? res.body.shopcarProds : [{ id: '', price: 0, quantt: 0}];
       }
     }).catch(err => {
       console.error(err);
       this.error = true;
     });
+    console.log(this.shopCar);
   }
 
-  pushProduct2Car(idProd: string, prcProd: number, qtProd: number) {
+  pushProduct2Car(sid: string, idProd: string, prcProd: number, qtProd: number) {
     console.log(this.shopCar);
+    const order = this.shopCar.order;
     const prodCar = { id: idProd, price: prcProd, quantt: qtProd };
     try {
       const findIt = this.shopCar.findProduct(idProd);
-      if (findIt < 0 || this.shopCar.products === undefined) {
+      if (findIt < 0) {
         this.shopCar.addProduct(prodCar);
+        this.dataService.addProd2Car(sid, order, prodCar).then(res => {
+          if (res.body.msgscs) { this.msgscs = res.body.msgscs; }
+          if (res.error) { throw res.error; }
+        }).catch(err => {
+          console.error(err);
+          this.error = false;
+        });
       } else {
-        this.shopCar.updProduct(idProd, prcProd, qtProd);
+        this.shopCar.updProduct(findIt, prcProd, qtProd);
+        this.dataService.updProdInCar(sid, order, findIt, idProd, prcProd, qtProd).then(res => {
+          if (res.body.msgscs) {
+            this.msgscs = res.body.msgscs;
+            console.log(this.msgscs);
+          }
+          if (res.error) { throw res.error; }
+        }).catch(err => {
+          console.error(err);
+          this.error = false;
+        });
       }
     } catch (error) {
       console.log(error);

@@ -20,8 +20,8 @@ let ProductSchema = new dataSchema({
 /* Esquema de Datos de los Productos del Carrito de Usuario - Tienda Online - Nivel 3 */
 let ShopCarProdsSchema = new dataSchema({
   id: { type: objectId, alias: 'scpid' },
-  price: { type: Date, alias: 'scpce' },
-  quantt: { type: Date, alias: 'scstk' }
+  price: { type: Number, alias: 'scpce' },
+  quantt: { type: Number, alias: 'scstk' }
 }, { id: false, _id: false });
 
 /* Esquema de Datos del Carrito de Usuario - Tienda Online - Nivel 2 */

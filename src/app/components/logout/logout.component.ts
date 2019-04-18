@@ -22,6 +22,7 @@ export class LogoutComponent implements DoCheck {
       }).catch(error => { console.error(error); });
     }
     this.bgRender.removeClass(document.body, 'bckgr-main');
+    console.clear();
     this.shopRouter.navigate([ '/inicio' ]);
   }
 }
