@@ -1,18 +1,33 @@
-import { Injectable } from '@angular/core';
+import { Injectable, AfterContentInit } from '@angular/core';
 import { DataService } from './data-service.service';
+import { GetSidService } from './get-sid.service';
 import { ShopCar } from '../data-model/shop-car';
+import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class ShopCarService {
+export class ShopCarService implements AfterContentInit {
   public userCar: string;
   public error = false;
   public msgerr: string;
   public msgscs: string;
   public shopCar: ShopCar = new ShopCar();
+  public prodsQtt: number;
+  public badgeNum: number;
+  public showBadge: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private userSid: GetSidService) {
+    this.showBadge.subscribe( value =>  value );
+  }
+
+  ngAfterContentInit(): void {
+    // Called after ngOnInit when the component's or directive's content has been initialized.
+    // Add 'implements AfterContentInit' to the class.
+    const sid: string = this.userSid.sendSid();
+    this.getShopCarData(sid);
+  }
 
   getShopCarData(sid: string) {
     this.dataService.getShopCarProds(sid).then(res  => {
@@ -22,17 +37,18 @@ export class ShopCarService {
         throw res.error;
       } else {
         this.error = false;
-        console.log(res.body);
         this.userCar = res.body.username;
         this.shopCar.order = res.body.order;
         this.shopCar.paidod = res.body.paidod;
         this.shopCar.products = res.body.shopcarProds !== undefined ? res.body.shopcarProds : [{ id: '', price: 0, quantt: 0}];
+        this.prodsQtt = this.shopCar.products.length;
+        // res.body.shopcarProds.length;
+        this.badgeNum = this.prodsQtt !== 0 ? this.prodsQtt : 0;
       }
     }).catch(err => {
       console.error(err);
       this.error = true;
     });
-    console.log(this.shopCar);
   }
 
   pushProduct2Car(sid: string, idProd: string, prcProd: number, qtProd: number) {
@@ -48,7 +64,6 @@ export class ShopCarService {
           if (res.error) { throw res.error; }
         }).catch(err => {
           console.error(err);
-          this.error = false;
         });
       } else {
         this.shopCar.updProduct(findIt, prcProd, qtProd);
@@ -60,11 +75,18 @@ export class ShopCarService {
           if (res.error) { throw res.error; }
         }).catch(err => {
           console.error(err);
-          this.error = false;
         });
       }
     } catch (error) {
       console.log(error);
+      this.error = true;
     }
+    console.log(this.shopCar.products.length + ' -- ' + this.prodsQtt);
+    this.showBadgeCar();
+  }
+
+  showBadgeCar() {
+    this.badgeNum = this.shopCar.products.length > this.prodsQtt ? this.shopCar.products.length - this.prodsQtt : 0;
+    console.log(this.badgeNum);
   }
 }

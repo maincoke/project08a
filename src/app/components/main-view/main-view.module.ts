@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { DataService } from '../../services/data-service.service';
 import { ProdSearchPipe } from '../../services/prod-search.pipe';
@@ -18,7 +19,7 @@ import { ProdSearchPipe } from '../../services/prod-search.pipe';
 import { MainViewRoutingModule } from './main-view-routing.module';
 
 import { MainViewComponent } from './main-view.component';
-import { TopbarComponent } from './topbar/topbar.component';
+import { TopbarComponent} from './topbar/topbar.component';
 import { CatalogComponent } from './catalog/catalog.component';
 import { ViewProductComponent } from './view-product/view-product.component';
 import { ShopCarComponent } from './shop-car/shop-car.component';
@@ -39,16 +40,17 @@ import { PurchasesComponent } from './purchases/purchases.component';
     MatButtonModule, MatIconModule,
     MatDialogModule, MatDividerModule,
     MatSnackBarModule, MatToolbarModule,
-    MatCardModule, MainViewRoutingModule,
+    MatCardModule, MatBadgeModule,
+    MainViewRoutingModule
   ],
   exports: [
     MatFormFieldModule, MatInputModule,
     MatButtonModule, MatIconModule,
     MatDividerModule, MatDialogModule,
     MatSnackBarModule, MatToolbarModule,
-    MatCardModule
+    MatCardModule, MatBadgeModule
   ],
-  providers: [ DataService ],
+  providers: [ DataService, TopbarComponent ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class MainViewModule { }

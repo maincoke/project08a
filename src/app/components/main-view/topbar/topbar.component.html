@@ -11,8 +11,9 @@
           </li>
           <li class="col-3 pl-0 pr-0">
             <a [routerLink]="[ 'carrito' ]" class="float-sm-right">
-              <mat-icon class="icon-toolbar" aria-hidden="false">shopping_cart</mat-icon>
-            </a>
+              <mat-icon [(matBadge)]="numBadge" matBadgeColor="warn" [(matBadgeHidden)]="hideBadge" class="icon-toolbar"
+                aria-hidden="false" id="carIcon">shopping_cart</mat-icon>
+            </a> <!--  -->
           </li>
           <li class="col-3 pl-0 pr-0">
             <a [routerLink]="[ 'compras' ]" class="float-sm-right">

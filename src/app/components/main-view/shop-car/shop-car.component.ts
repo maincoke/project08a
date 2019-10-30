@@ -20,7 +20,7 @@ export class ShopCarComponent implements OnInit {
     const sid: string = this.userSid.sendSid();
     this.shopCarData.getShopCarData(sid);
     if (!this.shopCarData.error && sid) {
-      console.log(this.shopCarData.error + ' - ' + sid);
+      console.log(this.shopCarData.error + ' - Shop-Car - ' + sid);
       console.log(this.shopCarData.shopCar);
       console.log(this.shopCarData.userCar);
     } else {

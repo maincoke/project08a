@@ -49,4 +49,9 @@ export class DataService {
     const dataProd = JSON.stringify({ sid: sidUser, order: ordCar, idx: idxProd, price: newPrc, quantt: newQt });
     return request.post(this.urlSvrData + '/updateprod/' + prodId).type('application/json').responseType('json').send(dataProd);
   }
+
+  public delProdFromCar(sidUser: string, ordCar: string, prodId: string) {
+    const dataProd = JSON.stringify({ sid: sidUser, order: ordCar });
+    return request.post(this.urlSvrData + '/deleteprod/' + prodId).type('application/json').responseType('json').send(dataProd);
+  }
 }

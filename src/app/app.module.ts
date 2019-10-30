@@ -1,5 +1,5 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -21,6 +21,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { TopbarComponent } from './components/main-view/topbar/topbar.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     MatDividerModule, MatDialogModule,
     MatSnackBarModule, MatToolbarModule
   ],
-  providers: [ DataService, ShopCarService ],
+  providers: [ DataService, ShopCarService, TopbarComponent ],
   bootstrap: [ AppComponent ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
