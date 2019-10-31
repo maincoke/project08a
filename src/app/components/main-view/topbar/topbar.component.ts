@@ -1,49 +1,44 @@
-import { Component, OnChanges, AfterViewInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { GetSidService } from '../../../services/get-sid.service';
 import { ShopCarService } from 'src/app/services/shop-car.service';
+import { DataService } from 'src/app/services/data-service.service';
 
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.css']
 })
-export class TopbarComponent implements  OnChanges, AfterViewInit {
+export class TopbarComponent implements OnInit, OnChanges {
   public hideBadge: boolean = this.shopCarSrv.showBadge.getValue();
   public badgeNumb: number = this.shopCarSrv.badgeNum.getValue();
   public numBadge: string = this.badgeNumb.toString();
 
-  constructor(private shopCarSrv: ShopCarService, private userSid: GetSidService) {
+  constructor(private shopCarSrv: ShopCarService, private userSid: GetSidService, private dataService: DataService) {
     this.shopCarSrv.showBadge.subscribe( badge =>  this.hideBadge = !badge );
     this.shopCarSrv.badgeNum.subscribe( numbdg =>  this.numBadge = numbdg.toString() );
-    this.setIconBadge();
-    console.log('TopBar--');
   }
 
-  ngAfterViewInit(): void {
-    // this.shopCarSrv.ngOnInit();
-    // this.setIconBadge();
+  ngOnInit(): void {
+    this.setIconBadge();
   }
 
   ngOnChanges(): void {
-    // this.setIconBadge();
+    this.setIconBadge();
   }
 
   setIconBadge() {
     const sid: string = this.userSid.sendSid();
-    let badgenumber = 0;
-    this.shopCarSrv.getShopCarData(sid);
-    if (!this.shopCarSrv.error && sid) {
-      console.log(this.shopCarSrv.getShopCarData(sid));
-      console.log(this.shopCarSrv.shopCar);
-      // console.log(this.shopCarSrv.shopCar.products.);
+    let badgenumber = 0; let response: any;
+    const shopCar = this.dataService.getShopCarProds(sid);
+    shopCar.then(res => {
+      response = res.body;
+    }).catch(err => {
+      console.error(err);
+    }).finally(() => {
       this.shopCarSrv.showBadge.next(false);
-      badgenumber = this.shopCarSrv.shopCar.products !== undefined &&
-                    this.shopCarSrv.shopCar.products.length > 0 ? this.shopCarSrv.shopCar.products.length : 0;
-    }
-    this.shopCarSrv.badgeNum.next(badgenumber);
-    this.shopCarSrv.showBadge.next(badgenumber > 0 ? true : false);
-    console.log(this.numBadge);
-    console.log(this.hideBadge);
+      badgenumber = response.shopcarProds.length > 0 ? response.shopcarProds.length : 0;
+      this.shopCarSrv.badgeNum.next(badgenumber);
+      this.shopCarSrv.showBadge.next(badgenumber > 0 ? true : false);
+    });
   }
-
 }

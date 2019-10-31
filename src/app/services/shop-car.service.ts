@@ -18,35 +18,35 @@ export class ShopCarService  implements OnInit {
   public badgeNum: BehaviorSubject<number> = new BehaviorSubject<number>(0) ;
   public showBadge: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-  constructor(private dataService: DataService, private userSid: GetSidService) {
-    // const sid: string = this.userSid.sendSid();
-    // this.getShopCarData(sid);
-
-    // ****** Probar en login la data de ShopCar //
-  }
+  constructor(private dataService: DataService, private userSid: GetSidService) { }
 
   ngOnInit(): void {
+    const sid: string = this.userSid.sendSid();
+    this.getShopCarData(sid);
   }
 
   getShopCarData(sid: string) {
-    this.dataService.getShopCarProds(sid).then(res  => {
-      if (res.body.msgerr) {
-        this.msgerr = res.body.msgerr;
-        console.log(this.msgerr);
-        throw res.error;
-      } else {
-        this.error = false;
-        this.userCar = res.body.username;
-        this.shopCar.order = res.body.order;
-        this.shopCar.paidod = res.body.paidod;
-        this.shopCar.products = res.body.shopcarProds !== undefined ? res.body.shopcarProds : [{ id: '', price: 0, quantt: 0}];
-        this.prodsQtt = this.shopCar.products.length;
-      }
+    const dataShocar = this.dataService.getShopCarProds(sid);
+    let response: any;
+    dataShocar.then(res  => {
+      response = res.body;
     }).catch(err => {
       console.error(err);
       this.error = true;
+    }).finally(() => {
+      if (response.msgerr) {
+        this.msgerr = response.msgerr;
+        console.log(this.msgerr);
+        throw response.error;
+      } else {
+        this.error = false;
+        this.userCar = response.username;
+        this.shopCar.order = response.order;
+        this.shopCar.paidod = response.paidod;
+        this.shopCar.products = response.shopcarProds !== undefined ? response.shopcarProds : [{ id: '', price: 0, quantt: 0}];
+        this.prodsQtt = this.shopCar.products.length;
+      }
     });
-    return { userCar: this.userCar, shopCar: this.shopCar, prodsQtt: this.prodsQtt };
   }
 
   pushProduct2Car(sid: string, idProd: string, prcProd: number, qtProd: number) {
@@ -79,7 +79,6 @@ export class ShopCarService  implements OnInit {
       console.log(error);
       this.error = true;
     }
-    console.log(this.shopCar.products.length + ' -- ' + this.prodsQtt);
   }
 
 }

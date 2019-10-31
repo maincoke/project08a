@@ -5,23 +5,27 @@
       <div class="col-xl-2 offset-xl-8 col-lg-3 offset-lg-7 col-md-4 offset-md-6 col-sm-6">
         <ul class="row mt-4 align-content-sm-center">
           <li class="col-3 pl-0 pr-0">
-            <a [routerLink]="[ 'catalogo' ]" class="float-sm-right">
+            <a [routerLink]="[ 'catalogo' ]" class="float-sm-right" matTooltip="Catálogo"
+               matTooltipClass="tooltip-topbar" matTooltipPosition="before">
               <mat-icon class="icon-toolbar" aria-hidden="false">apps</mat-icon>
             </a>
           </li>
           <li class="col-3 pl-0 pr-0">
-            <a [routerLink]="[ 'carrito' ]" class="float-sm-right">
+            <a [routerLink]="[ 'carrito' ]" class="float-sm-right" matTooltip="Carro de Compras"
+               matTooltipClass="tooltip-topbar" matTooltipPosition="before">
               <mat-icon [(matBadge)]="numBadge" matBadgeColor="warn" [(matBadgeHidden)]="hideBadge" class="icon-toolbar"
                 aria-hidden="false" id="carIcon">shopping_cart</mat-icon>
             </a> <!--  -->
           </li>
           <li class="col-3 pl-0 pr-0">
-            <a [routerLink]="[ 'compras' ]" class="float-sm-right">
+            <a [routerLink]="[ 'compras' ]" class="float-sm-right" matTooltip="Compras Realizadas"
+               matTooltipClass="tooltip-topbar" matTooltipPosition="before">
               <mat-icon class="icon-toolbar" aria-hidden="false">inbox</mat-icon>
             </a>
           </li>
           <li class="col-3 pl-0 pr-0">
-            <a [routerLink]="[ '../salir' ]" class="float-sm-right">
+            <a [routerLink]="[ '../salir' ]" class="float-sm-right" matTooltip="Salir"
+               matTooltipClass="tooltip-topbar" matTooltipPosition="before">
               <mat-icon class="icon-toolbar" aria-hidden="false">exit_to_app</mat-icon>
             </a>
           </li>

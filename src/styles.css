@@ -50,3 +50,9 @@ body {  margin: 0; }
   font-weight: bolder;
   background: #5fc777 !important;
 }
+
+.tooltip-topbar {
+  font-size: 0.8em;
+  font-weight: 600;
+  background: #1598cce5;
+}
