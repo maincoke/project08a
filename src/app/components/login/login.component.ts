@@ -49,8 +49,8 @@ export class LoginComponent implements AfterViewChecked {
           this.barNotice.open(result, '', { duration: 4000, panelClass: barClass });
         } else {
           // Enrutar hacia la pagina de productos y carrito //////// ****** ////// ****** ///////
-          /*barClass = 'notice-bar-success';
-          this.barNotice.open('Usuario autenticado!!', '', { duration: 4000, panelClass: barClass });*/
+          barClass = 'notice-bar-success';
+          this.barNotice.open('Usuario autenticado!!', '', { duration: 4000, panelClass: barClass });
           // console.log(response.id + '  ----  ' + response.username + ' --- ' + response.sid);
           this.shopRouter.navigate([ 'bodega/catalogo' ]);
         }

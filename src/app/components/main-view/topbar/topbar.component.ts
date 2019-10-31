@@ -1,4 +1,4 @@
-import { Component, AfterContentInit } from '@angular/core';
+import { Component, OnChanges, AfterViewInit } from '@angular/core';
 import { GetSidService } from '../../../services/get-sid.service';
 import { ShopCarService } from 'src/app/services/shop-car.service';
 
@@ -7,31 +7,41 @@ import { ShopCarService } from 'src/app/services/shop-car.service';
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.css']
 })
-export class TopbarComponent implements AfterContentInit {
-  public hideBadge: boolean = this.shopCar.showBadge.getValue();
-  public numBadge: string; //  = this.shopCar.badgeNum !== undefined && this.shopCar.badgeNum !== 0 ? this.shopCar.badgeNum.toString() : '0';
+export class TopbarComponent implements  OnChanges, AfterViewInit {
+  public hideBadge: boolean = this.shopCarSrv.showBadge.getValue();
+  public badgeNumb: number = this.shopCarSrv.badgeNum.getValue();
+  public numBadge: string = this.badgeNumb.toString();
 
-  constructor(private shopCar: ShopCarService, private userSid: GetSidService) {
-    this.shopCar.showBadge.subscribe( badge =>  this.hideBadge = !badge );
-    this.numBadge = this.shopCar.badgeNum !== undefined && this.shopCar.badgeNum !== 0 ? this.shopCar.badgeNum.toString() : '0';
+  constructor(private shopCarSrv: ShopCarService, private userSid: GetSidService) {
+    this.shopCarSrv.showBadge.subscribe( badge =>  this.hideBadge = !badge );
+    this.shopCarSrv.badgeNum.subscribe( numbdg =>  this.numBadge = numbdg.toString() );
+    this.setIconBadge();
+    console.log('TopBar--');
   }
 
-  ngAfterContentInit(): void {
-    const sid: string = this.userSid.sendSid();
-    this.shopCar.getShopCarData(sid);
-    if (!this.shopCar.error && sid) {
-      console.log(this.shopCar.error + ' - Top-Bar - ' + sid);
-      console.log(this.shopCar.shopCar);
-      console.log(this.shopCar.userCar);
-    }
-    this.setIconBadge();
+  ngAfterViewInit(): void {
+    // this.shopCarSrv.ngOnInit();
+    // this.setIconBadge();
+  }
+
+  ngOnChanges(): void {
+    // this.setIconBadge();
   }
 
   setIconBadge() {
-    this.shopCar.showBadge.next(false);
-    this.numBadge = this.shopCar.badgeNum !== undefined && this.shopCar.badgeNum !== 0 ? this.shopCar.badgeNum.toString() : '0';
-    this.shopCar.showBadge.next(this.numBadge === '0' ? false : true);
-    console.log(this.shopCar.badgeNum);
+    const sid: string = this.userSid.sendSid();
+    let badgenumber = 0;
+    this.shopCarSrv.getShopCarData(sid);
+    if (!this.shopCarSrv.error && sid) {
+      console.log(this.shopCarSrv.getShopCarData(sid));
+      console.log(this.shopCarSrv.shopCar);
+      // console.log(this.shopCarSrv.shopCar.products.);
+      this.shopCarSrv.showBadge.next(false);
+      badgenumber = this.shopCarSrv.shopCar.products !== undefined &&
+                    this.shopCarSrv.shopCar.products.length > 0 ? this.shopCarSrv.shopCar.products.length : 0;
+    }
+    this.shopCarSrv.badgeNum.next(badgenumber);
+    this.shopCarSrv.showBadge.next(badgenumber > 0 ? true : false);
     console.log(this.numBadge);
     console.log(this.hideBadge);
   }

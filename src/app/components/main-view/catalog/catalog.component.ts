@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { GetSidService } from '../../../services/get-sid.service';
@@ -7,7 +7,6 @@ import { ProdSearchPipe} from '../../../services/prod-search.pipe';
 import { ShopCarService } from '../../../services/shop-car.service';
 import { TopbarComponent } from '../../../components/main-view/topbar/topbar.component';
 import { Product } from '../../../data-model/product';
-import { MatBadge } from '@angular/material/badge';
 
 @Component({
   selector: 'app-catalog',
@@ -19,8 +18,7 @@ export class CatalogComponent implements OnInit {
   public prodSearcher: Product = new Product();
   public prodFilter: ProdSearchPipe;
   constructor(private dataService: DataService, private userSid: GetSidService, private barNotice: MatSnackBar,
-              private shopRouter: Router, public shopCarData: ShopCarService, private shopCarIcon: TopbarComponent,
-              private render: Renderer2) { }
+              private shopRouter: Router, public shopCarData: ShopCarService, private shopCarIcon: TopbarComponent ) { }
 
   ngOnInit() {
     const sid: string = this.userSid.sendSid();
@@ -53,5 +51,6 @@ export class CatalogComponent implements OnInit {
     const sid: string = this.userSid.sendSid();
     this.shopCarData.pushProduct2Car(sid, prod._id, prod.price, qtProd.value);
     this.shopCarIcon.setIconBadge();
+    console.log('Catalog--');
   }
 }

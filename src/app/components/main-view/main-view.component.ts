@@ -1,6 +1,7 @@
 import { Component, Renderer2 } from '@angular/core';
 import { ShopCarService } from '../../services/shop-car.service';
 import { GetSidService } from '../../services/get-sid.service';
+import { TopbarComponent } from './topbar/topbar.component';
 
 @Component({
   selector: 'app-main-view',
@@ -9,7 +10,8 @@ import { GetSidService } from '../../services/get-sid.service';
 })
 export class MainViewComponent {
 
-  constructor(private bgRender: Renderer2, private shopCarData: ShopCarService, private userId: GetSidService) {
+  constructor(private bgRender: Renderer2, private shopCarData: ShopCarService,
+              private userId: GetSidService, private topBar: TopbarComponent) {
     const sid = this.userId.sendSid();
     this.bgRender.addClass(document.body, 'bckgr-main');
   }
