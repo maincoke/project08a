@@ -20,9 +20,9 @@ export class ShopCarComponent implements OnInit {
     const sid: string = this.userSid.sendSid();
     this.shopCarData.getShopCarData(sid);
     if (!this.shopCarData.error && sid) {
-      console.log(this.shopCarData.error + ' - Shop-Car - ' + sid);
+    /*  console.log(this.shopCarData.error + ' - Shop-Car - ' + sid);
       console.log(this.shopCarData.shopCar);
-      console.log(this.shopCarData.userCar);
+      console.log(this.shopCarData.userCar);*/
     } else {
       console.log(this.shopCarData.error);
       if (this.shopCarData.msgerr) {
@@ -30,6 +30,6 @@ export class ShopCarComponent implements OnInit {
       }
       this.shopRouter.navigate([ 'salir' ]);
     }
-    console.log('Carrito actualizado..: ' + this.shopCarData.shopCar.order +  ' --- ' + this.shopCarData.shopCar.paidod);
+    // console.log('Carrito actualizado..: ' + this.shopCarData.shopCar.order +  ' --- ' + this.shopCarData.shopCar.paidod);
   }
 }

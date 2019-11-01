@@ -31,7 +31,17 @@ return sessionStored.destroy(sid, (error) => {
   });
 }
 
-// Verificación y regeneración de sesión del Usuario // ************************************************************************
+// *** Función que actualiza en el Producto las unidades disponibles *** //
+updStockProd = (idprod, newQtt) => {
+  Product.updateOne({ _id: objectId(idprod) }, { $set: { stock: newQtt}}, (error, doc) => {
+    if (error) {
+      res.send({ msgerr: 'Hubo un error al actualizar las Unidades del producto!!'});
+      console.error('===>>> Error en la actualización del Stock del producto: \n' + error);
+    }
+  });
+}
+
+// Verificación y regeneración de sesión del Usuario // ************************ Rutas Get/Post *************************************
 Router.post('/', function(req, res) {
   console.log(req.body);
   this.getSession(req.body.sid).then(sessusr => {
@@ -39,7 +49,6 @@ Router.post('/', function(req, res) {
   }).catch(error => {
     console.error('No existe la SESION....!!!');
   });
-  console.log('Final de consulta de Sesion ====////****');
 });
 
 // *** Verificación de Login, acceso y configuración de Sesion del Usuario *** //
@@ -123,6 +132,7 @@ Router.post('/newprod', function(req, res) {
     User.updateOne({ emailusr: sessusr.username, "shopcar.order": req.body.order, "shopcar.paidod": false },
       { "$push": { "shopcar.$.products": product }}, (error, doc) => {
       if (!error) {
+        updStockProd(product.id, req.body.newstk);
         let success = { id: product.id, msgscs: "Producto agregado al carrito!!" };
         res.send(success);
       } else {
@@ -143,10 +153,12 @@ Router.post('/updateprod/:id', function(req, res) {
   this.getSession(req.body.sid).then(sessusr => {
     const setPrc = "shopcar.$.products." + req.body.idx.toString() + ".price";
     const setQtt = "shopcar.$.products." + req.body.idx.toString() + ".quantt";
+    // const setStk =
     User.updateOne({ emailusr: sessusr.username, "shopcar.paidod": false, "shopcar.products.id": objectId(req.params.id) },
     { $set: { [setPrc]: req.body.price, [setQtt]: req.body.quantt } }, (error, doc) => {
       if (!error) {
-         res.send({ msgscs: 'Cantidad y precio actualizados con éxito!!'});
+        updStockProd(req.params.id, req.body.newstk);
+        res.send({ msgscs: 'Cantidad y precio actualizados con éxito!!'});
       } else {
         res.send({ msgerr: 'Hubo un error al actualizar los datos del producto!!'});
         console.error('===>>> Error en la actualización del producto en el carrito: \n' + error);
@@ -187,7 +199,6 @@ Router.post('/shopcar', function(req, res) {
       } else {
         dataCar.shopcarProds =  new Array;
       }
-      // console.log(doc.shopcar[0].products.length);
       res.send(dataCar);
     }).catch(error  => {
       let wrong = { msgerr: 'Hubo un error en obtener los productos del carrito!!' };

@@ -40,18 +40,18 @@ export class DataService {
     return request.post(this.urlSvrData + '/shopcar').type('application/json').responseType('json').send(sid);
   }
 
-  public addProd2Car(sidUser: string, ordCar: string, newProd: { id: string, price: number, quantt: number }) {
-    const dataProd = JSON.stringify({ sid: sidUser, order: ordCar, prod: newProd });
+  public addProd2Car(sidUser: string, ordCar: string, newProd: { id: string, price: number, quantt: number }, newStk: number) {
+    const dataProd = JSON.stringify({ sid: sidUser, order: ordCar, prod: newProd, newstk: newStk });
     return request.post(this.urlSvrData + '/newprod').type('application/json').responseType('json').send(dataProd);
   }
 
-  public updProdInCar(sidUser: string, ordCar: string, idxProd: number, prodId: string, newPrc: number, newQt: number) {
-    const dataProd = JSON.stringify({ sid: sidUser, order: ordCar, idx: idxProd, price: newPrc, quantt: newQt });
+  public updProdInCar(sidUser: string, ordCar: string, idxProd: number, prodId: string, newPrc: number, newQt: number, newStk: number) {
+    const dataProd = JSON.stringify({ sid: sidUser, order: ordCar, idx: idxProd, price: newPrc, quantt: newQt, newstk: newStk });
     return request.post(this.urlSvrData + '/updateprod/' + prodId).type('application/json').responseType('json').send(dataProd);
   }
 
-  public delProdFromCar(sidUser: string, ordCar: string, prodId: string) {
-    const dataProd = JSON.stringify({ sid: sidUser, order: ordCar });
+  public delProdFromCar(sidUser: string, ordCar: string, prodId: string, newStk: number) {
+    const dataProd = JSON.stringify({ sid: sidUser, order: ordCar, newstk: newStk });
     return request.post(this.urlSvrData + '/deleteprod/' + prodId).type('application/json').responseType('json').send(dataProd);
   }
 }

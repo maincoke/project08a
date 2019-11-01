@@ -1,8 +1,9 @@
 import { Injectable, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { BehaviorSubject } from 'rxjs';
 import { DataService } from './data-service.service';
 import { GetSidService } from './get-sid.service';
 import { ShopCar } from '../data-model/shop-car';
-import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable({
@@ -18,7 +19,7 @@ export class ShopCarService  implements OnInit {
   public badgeNum: BehaviorSubject<number> = new BehaviorSubject<number>(0) ;
   public showBadge: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-  constructor(private dataService: DataService, private userSid: GetSidService) { }
+  constructor(private dataService: DataService, private userSid: GetSidService, private barNotice: MatSnackBar ) { }
 
   ngOnInit(): void {
     const sid: string = this.userSid.sendSid();
@@ -49,27 +50,29 @@ export class ShopCarService  implements OnInit {
     });
   }
 
-  pushProduct2Car(sid: string, idProd: string, prcProd: number, qtProd: number) {
-    console.log(this.shopCar);
+  pushProduct2Car(sid: string, idProd: string, prcProd: number, qtProd: number, newStk: number) {
+    // console.log(this.shopCar);
     const order = this.shopCar.order;
     const prodCar = { id: idProd, price: prcProd, quantt: qtProd };
     try {
       const findIt = this.shopCar.findProduct(idProd);
       if (findIt < 0) {
         this.shopCar.addProduct(prodCar);
-        this.dataService.addProd2Car(sid, order, prodCar).then(res => {
-          if (res.body.msgscs) { this.msgscs = res.body.msgscs; }
+        this.dataService.addProd2Car(sid, order, prodCar, newStk).then(res => {
+          this.barNotice.open(res.body.msgscs, '', { duration: 1500, panelClass: 'notice-bar-success' });
           if (res.error) { throw res.error; }
         }).catch(err => {
           console.error(err);
         });
       } else {
-        this.shopCar.updProduct(findIt, prcProd, qtProd);
-        this.dataService.updProdInCar(sid, order, findIt, idProd, prcProd, qtProd).then(res => {
-          if (res.body.msgscs) {
-            this.msgscs = res.body.msgscs;
-            console.log(this.msgscs);
-          }
+        const prodUpd = this.shopCar.updProduct(findIt, prcProd);
+        const newQt = (prodUpd.newQtt + qtProd);
+        console.log('==============================================================');
+        console.log(prodUpd);
+        console.log(qtProd);
+        console.log(newQt);
+        this.dataService.updProdInCar(sid, order, findIt, idProd, prcProd, newQt, newStk).then(res => {
+          this.barNotice.open(res.body.msgscs, '', { duration: 1500, panelClass: 'notice-bar-success' });
           if (res.error) { throw res.error; }
         }).catch(err => {
           console.error(err);
