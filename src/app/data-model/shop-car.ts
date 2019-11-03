@@ -16,14 +16,8 @@ export class ShopCar {
   delProduct(idxProd: number) { return this.products.splice(idxProd, 1); }
 
   updProduct(idxProd: number, newPrc: number) {
-    console.log('****************  %%%%%%%%%%%%%%%%');
-    console.log(idxProd);
-    console.log(newPrc);
-    console.log(this.products[idxProd].quantt);
     const newQtt: number = this.products[idxProd].quantt;
     const priceNew: number = this.products[idxProd].price !== newPrc ? newPrc : this.products[idxProd].price;
-    console.log(newQtt + ' ---- ' + priceNew);
-    console.log('**************** ///////////// ---------------- %%%%%%%%%%%%%%%%');
     return { priceNew, newQtt };
   }
 }

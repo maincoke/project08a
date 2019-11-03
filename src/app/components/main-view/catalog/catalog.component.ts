@@ -24,6 +24,10 @@ export class CatalogComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadingProdsAndShopcar();
+  }
+
+  loadingProdsAndShopcar() {
     const sid: string = this.userSid.sendSid();
     this.dataService.getProducts(sid).then(res  => {
       if (res.body.msgerr) {
@@ -32,7 +36,6 @@ export class CatalogComponent implements OnInit {
       } else {
         this.prodSearcher.name = '';
         this.products = res.body;
-        // Realizar carga de Productos...!!!!
         this.shopCarData.getShopCarData(sid);
         if (this.shopCarData.error) {
           console.log(this.shopCarData.error);
@@ -49,15 +52,11 @@ export class CatalogComponent implements OnInit {
   }
 
   addProduct2Car(prod: any, qtProd: any) {
-    // tslint:disable-next-line: radix
-    const prodQtt: number = parseInt(qtProd.value);
+    const prodQtt: number = parseFloat(qtProd.value);
     const stocknow: number = prod.stock - prodQtt;
     this.stockChanger =  new BehaviorSubject<number>(prod.stock);
     this.stockChanger.subscribe(stockvalue =>  prod.stock = stockvalue );
     this.stockChanger.next(stocknow);
-    console.log(prodQtt);
-    console.log(stocknow);
-    console.log(prod.stock);
     const sid: string = this.userSid.sendSid();
     this.shopCarData.pushProduct2Car(sid, prod._id, prod.price, prodQtt, stocknow);
     this.shopCarIcon.setIconBadge();

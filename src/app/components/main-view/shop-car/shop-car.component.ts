@@ -17,6 +17,10 @@ export class ShopCarComponent implements OnInit {
               private barNotice: MatSnackBar, private shopRouter: Router) { }
 
   ngOnInit() {
+    this.loadingShopcar();
+  }
+
+  loadingShopcar() {
     const sid: string = this.userSid.sendSid();
     this.shopCarData.getShopCarData(sid);
     if (!this.shopCarData.error && sid) {

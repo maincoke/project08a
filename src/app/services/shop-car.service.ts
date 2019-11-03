@@ -51,7 +51,6 @@ export class ShopCarService  implements OnInit {
   }
 
   pushProduct2Car(sid: string, idProd: string, prcProd: number, qtProd: number, newStk: number) {
-    // console.log(this.shopCar);
     const order = this.shopCar.order;
     const prodCar = { id: idProd, price: prcProd, quantt: qtProd };
     try {
@@ -59,7 +58,7 @@ export class ShopCarService  implements OnInit {
       if (findIt < 0) {
         this.shopCar.addProduct(prodCar);
         this.dataService.addProd2Car(sid, order, prodCar, newStk).then(res => {
-          this.barNotice.open(res.body.msgscs, '', { duration: 1500, panelClass: 'notice-bar-success' });
+          this.successAdding(res.body.msgscs, sid);
           if (res.error) { throw res.error; }
         }).catch(err => {
           console.error(err);
@@ -67,12 +66,8 @@ export class ShopCarService  implements OnInit {
       } else {
         const prodUpd = this.shopCar.updProduct(findIt, prcProd);
         const newQt = (prodUpd.newQtt + qtProd);
-        console.log('==============================================================');
-        console.log(prodUpd);
-        console.log(qtProd);
-        console.log(newQt);
         this.dataService.updProdInCar(sid, order, findIt, idProd, prcProd, newQt, newStk).then(res => {
-          this.barNotice.open(res.body.msgscs, '', { duration: 1500, panelClass: 'notice-bar-success' });
+          this.successAdding(res.body.msgscs, sid);
           if (res.error) { throw res.error; }
         }).catch(err => {
           console.error(err);
@@ -84,4 +79,8 @@ export class ShopCarService  implements OnInit {
     }
   }
 
+  successAdding(msg: string, sid: string) {
+    this.barNotice.open(msg, '', { duration: 1500, panelClass: 'notice-bar-success' });
+    this.getShopCarData(sid);
+  }
 }
