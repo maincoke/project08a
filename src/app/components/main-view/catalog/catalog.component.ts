@@ -43,6 +43,8 @@ export class CatalogComponent implements OnInit {
             this.barNotice.open(this.shopCarData.msgerr, '', { duration: 4000, panelClass: 'notice-bar-error' });
           }
           throw res.error;
+        } else {
+          this.shopCarIcon.setIconBadge();
         }
       }
     }).catch(err => {

@@ -1,15 +1,16 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject } from 'rxjs';
 import { DataService } from './data-service.service';
 import { GetSidService } from './get-sid.service';
 import { ShopCar } from '../data-model/shop-car';
-
+import { Product } from '../data-model/product';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ShopCarService  implements OnInit {
+export class ShopCarService {
+  public listProds: Product[];
   public userCar: string;
   public error = false;
   public msgerr: string;
@@ -19,17 +20,20 @@ export class ShopCarService  implements OnInit {
   public badgeNum: BehaviorSubject<number> = new BehaviorSubject<number>(0) ;
   public showBadge: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-  constructor(private dataService: DataService, private userSid: GetSidService, private barNotice: MatSnackBar ) { }
+  constructor(private dataService: DataService, private userSid: GetSidService, private barNotice: MatSnackBar ) {
+    this.initService();
+  }
 
-  ngOnInit(): void {
+  initService() {
     const sid: string = this.userSid.sendSid();
     this.getShopCarData(sid);
+    this.gettingDataProds(sid);
   }
 
   getShopCarData(sid: string) {
-    const dataShocar = this.dataService.getShopCarProds(sid);
+    const dataShopcar = this.dataService.getShopCarProds(sid);
     let response: any;
-    dataShocar.then(res  => {
+    dataShopcar.then(res  => {
       response = res.body;
     }).catch(err => {
       console.error(err);
@@ -47,6 +51,16 @@ export class ShopCarService  implements OnInit {
         this.shopCar.products = response.shopcarProds !== undefined ? response.shopcarProds : [{ id: '', price: 0, quantt: 0}];
         this.prodsQtt = this.shopCar.products.length;
       }
+    });
+  }
+
+  gettingDataProds(sid: string) {
+    const dataProds = this.dataService.getProducts(sid);
+    dataProds.then(res => {
+      this.listProds = res.body;
+    }).catch(err => {
+      console.error(err);
+    }).finally(() => {
     });
   }
 

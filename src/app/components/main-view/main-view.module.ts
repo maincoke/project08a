@@ -13,6 +13,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatListModule } from '@angular/material/list';
 
 import { DataService } from '../../services/data-service.service';
 import { ProdSearchPipe } from '../../services/prod-search.pipe';
@@ -41,7 +42,7 @@ import { PurchasesComponent } from './purchases/purchases.component';
     MatButtonModule, MatIconModule,
     MatDialogModule, MatDividerModule,
     MatSnackBarModule, MatToolbarModule,
-    MatCardModule, MatBadgeModule,
+    MatCardModule, MatBadgeModule, MatListModule,
     MatTooltipModule, MainViewRoutingModule
   ],
   exports: [
@@ -49,7 +50,7 @@ import { PurchasesComponent } from './purchases/purchases.component';
     MatButtonModule, MatIconModule,
     MatDividerModule, MatDialogModule,
     MatSnackBarModule, MatToolbarModule,
-    MatCardModule, MatBadgeModule,
+    MatCardModule, MatBadgeModule, MatListModule,
     MatTooltipModule
   ],
   providers: [ DataService, TopbarComponent ],
