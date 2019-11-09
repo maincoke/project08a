@@ -41,7 +41,14 @@ updStockProd = (idprod, newQtt) => {
   });
 }
 
-// Verificación y regeneración de sesión del Usuario // ************************ Rutas Get/Post *************************************
+// Habilitación de CORS en las solicitudes de datos entre Servidores // ************************ Rutas Get/Post *************************************
+Router.all('/', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
+// Verificación y regeneración de sesión del Usuario //
 Router.post('/', function(req, res) {
   console.log(req.body);
   this.getSession(req.body.sid).then(sessusr => {
@@ -153,7 +160,6 @@ Router.post('/updateprod/:id', function(req, res) {
   this.getSession(req.body.sid).then(sessusr => {
     const setPrc = "shopcar.$.products." + req.body.idx.toString() + ".price";
     const setQtt = "shopcar.$.products." + req.body.idx.toString() + ".quantt";
-    // const setStk =
     User.updateOne({ emailusr: sessusr.username, "shopcar.paidod": false, "shopcar.products.id": objectId(req.params.id) },
     { $set: { [setPrc]: req.body.price, [setQtt]: req.body.quantt } }, (error, doc) => {
       if (!error) {
@@ -174,10 +180,10 @@ Router.post('/updateprod/:id', function(req, res) {
 Router.post('/deleteprod/:id', function(req, res) {
   this.getSession(req.body.sid).then(sessusr => {
     User.updateOne({ emailusr: sessusr.username, "shopcar.paidod": false, "shopcar.products.id": objectId(req.params.id) },
-    { "$pull": { shopcar: { products: { $elementMatch: { id: req.params.id }}}}}, (error, doc) => {
+    { "$pull": { "shopcar.0.products": { id: objectId(req.params.id) }}}, (error, doc) => {
       if (!error) {
+         updStockProd(req.params.id, req.body.newstk);
          res.send({ msgscs: 'Producto sacado del carrito con éxito!!'});
-         console.log(doc);
       } else {
         res.send({ msgerr: 'Hubo un error al borrar los datos del producto!!'});
         console.error('===>>> Error en la eliminación del producto en el carrito: \n' + error);
@@ -221,13 +227,11 @@ Router.post('/product/:id', function(req, res) {
       let prodData = doc;
       res.send(prodData);
     }).catch(error => {
-      let wrong = { msgerr: 'Hubo un error en la obtención del producto: \n' + req.params.id };
-      res.send(wrong);
+      res.send({ msgerr: 'Hubo un error en la obtención del producto: \n' + req.params.id });
       console.error('===>>> Error en la obtención del producto:  \n' + error);
     });
   }).catch(error => {
-    let wrong = { msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' };
-    res.send(wrong);
+    res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
     console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });

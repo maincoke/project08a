@@ -22,6 +22,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { TopbarComponent } from './components/main-view/topbar/topbar.component';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [

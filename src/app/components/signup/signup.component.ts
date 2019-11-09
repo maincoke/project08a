@@ -31,9 +31,8 @@ export class SignupComponent {
     againPwrd: this.againPwrd
   },  {validators: this.dontMatch });
   public pwordMatcher = new PwordMatcher();
-  private dataService: DataService = new DataService();
 
-  constructor(private userSignup: MatDialogRef<SignupComponent>,
+  constructor(private userSignup: MatDialogRef<SignupComponent>, private dataService: DataService,
               @Inject(MAT_DIALOG_DATA) private newSignUser: User,
               public barNotice: MatSnackBar) {}
 

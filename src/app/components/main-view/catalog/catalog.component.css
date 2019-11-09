@@ -79,3 +79,9 @@ button {
   height: 2.2rem;
   align-self: flex-end;
 }
+
+@media screen and (min-width: 1440px) {
+  .catalog {
+    max-width: 1200px !important;
+  }
+}

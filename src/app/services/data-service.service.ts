@@ -7,10 +7,11 @@ import { Creds } from '../data-model/creds';
   providedIn: 'root'
 })
 export class DataService {
-  private urlSvrData = 'http://localhost:3000/shopping';
-  constructor() {}
+  private urlSvrData = 'http://' + window.location.hostname + ':3000/shopping';
+  constructor() { }
 
   public checkLogin(credsUser: Creds) {
+    console.log(window.location.hostname);
     const userCreds = JSON.stringify(credsUser);
     return request.post(this.urlSvrData + '/login').type('application/json').responseType('json').send(userCreds);
   }

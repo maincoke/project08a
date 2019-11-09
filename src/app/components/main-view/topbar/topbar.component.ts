@@ -13,10 +13,7 @@ export class TopbarComponent implements OnInit, OnChanges {
   public badgeNumb: number = this.shopCarSrv.badgeNum.getValue();
   public numBadge: string = this.badgeNumb.toString();
 
-  constructor(private shopCarSrv: ShopCarService, private userSid: GetSidService, private dataService: DataService) {
-    this.shopCarSrv.showBadge.subscribe( badge =>  this.hideBadge = !badge );
-    this.shopCarSrv.badgeNum.subscribe( numbdg =>  this.numBadge = numbdg.toString() );
-  }
+  constructor(private shopCarSrv: ShopCarService, private userSid: GetSidService, private dataService: DataService) { }
 
   ngOnInit(): void {
     this.setIconBadge();
@@ -26,11 +23,12 @@ export class TopbarComponent implements OnInit, OnChanges {
     this.setIconBadge();
   }
 
-  setIconBadge() {
+  async setIconBadge() {
+    this.shopCarSrv.showBadge.subscribe( badge =>  this.hideBadge = !badge );
+    this.shopCarSrv.badgeNum.subscribe( numbdg =>  this.numBadge = numbdg.toString() );
     const sid: string = this.userSid.sendSid();
     let badgenumber = 0; let response: any;
-    const shopCar = this.dataService.getShopCarProds(sid);
-    shopCar.then(res => {
+    this.dataService.getShopCarProds(sid).then(res => {
       response = res.body;
     }).catch(err => {
       console.error(err);

@@ -7,6 +7,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -37,20 +38,17 @@ import { PurchasesComponent } from './purchases/purchases.component';
   imports: [
     CommonModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule, FormsModule,
-    MatFormFieldModule, MatInputModule,
-    MatButtonModule, MatIconModule,
-    MatDialogModule, MatDividerModule,
-    MatSnackBarModule, MatToolbarModule,
-    MatCardModule, MatBadgeModule, MatListModule,
-    MatTooltipModule, MainViewRoutingModule
+    ReactiveFormsModule, FormsModule, MatFormFieldModule,
+    MatInputModule, MatButtonModule, MatButtonToggleModule,
+    MatIconModule, MatDialogModule, MatDividerModule,
+    MatSnackBarModule, MatToolbarModule, MatCardModule,
+    MatBadgeModule, MatListModule, MatTooltipModule,
+    MainViewRoutingModule
   ],
   exports: [
-    MatFormFieldModule, MatInputModule,
-    MatButtonModule, MatIconModule,
-    MatDividerModule, MatDialogModule,
-    MatSnackBarModule, MatToolbarModule,
-    MatCardModule, MatBadgeModule, MatListModule,
+    MatFormFieldModule, MatInputModule, MatButtonModule, MatButtonToggleModule,
+    MatIconModule, MatDividerModule, MatDialogModule, MatSnackBarModule,
+    MatToolbarModule, MatCardModule, MatBadgeModule, MatListModule,
     MatTooltipModule
   ],
   providers: [ DataService, TopbarComponent ],

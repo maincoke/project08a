@@ -5,7 +5,11 @@ html, body {
   height: 100%;
   font-family: 'Josefin Sans', sans-serif !important;
 }
-body {  margin: 0; }
+
+body {
+  margin: 0;
+  max-width: 1440px !important;
+ }
 
 .bckgr-login {
   background-image: linear-gradient(#00000070, #00000070), url('./assets/login-fondo.jpg');
@@ -55,4 +59,10 @@ body {  margin: 0; }
   font-size: 0.8em;
   font-weight: 600;
   background: #1598cce5;
+}
+
+@media screen and (min-width: 1560px) {
+  body {
+    margin-left: 15% !important;
+  }
 }

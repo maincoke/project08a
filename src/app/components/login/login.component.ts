@@ -19,10 +19,9 @@ export class LoginComponent implements AfterViewChecked {
     loginAccount: this.loginAccount,
     passwAccount: this.passwAccount
   });
-  private dataService: DataService = new DataService();
-  public submitBttn = true;
+  public submitBttn: boolean;
 
-  constructor(private bgRender: Renderer2, public userDialog: MatDialog,
+  constructor(private bgRender: Renderer2, public userDialog: MatDialog, private dataService: DataService,
               public barNotice: MatSnackBar, public shopRouter: Router) {
   }
 
@@ -51,7 +50,6 @@ export class LoginComponent implements AfterViewChecked {
           // Enrutar hacia la pagina de productos y carrito //////// ****** ////// ****** ///////
           barClass = 'notice-bar-success';
           this.barNotice.open('Usuario autenticado!!', '', { duration: 3000, panelClass: barClass });
-          // console.log(response.id + '  ----  ' + response.username + ' --- ' + response.sid);
           this.shopRouter.navigate([ 'bodega/catalogo' ]);
         }
       });

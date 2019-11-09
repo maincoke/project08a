@@ -5,12 +5,12 @@
  */
 const path = require('path'),
       Routing = require('./routes.js'),
+      cors = require('cors'),
       express = require('express'),
       session = require('express-session'),
-      cors = require('cors');
       genuuid = require('uuid/v4'),
       mongoose = require('mongoose'),
-      mongoSession = require('connect-mongo')(session);
+      mongoSession = require('connect-mongo')(session),
       bodyParser = require('body-parser');
 
 /* Configuración de instancias y variables del Servidor */
@@ -42,9 +42,10 @@ const userSession = session({
 });
 shop.use(userSession);
 
-/* Uso de instancia de servidor para configurar enrutador de funciones y contenido body-parser */
+/* Uso de instancia de servidor para configurar el contenido body-parser, CORS y el enrutador de solicitudes */
 shop.use(bodyParser.json());
 shop.use(bodyParser.urlencoded({ extended: true }));
+shop.options('*', cors());
 shop.use(cors());
 shop.use('/shopping', Routing);
 

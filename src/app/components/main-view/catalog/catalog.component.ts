@@ -20,8 +20,7 @@ export class CatalogComponent implements OnInit {
   public prodFilter: ProdSearchPipe;
   public stockChanger: BehaviorSubject<number>;
   constructor(private dataService: DataService, private userSid: GetSidService, private barNotice: MatSnackBar,
-              private shopRouter: Router, public shopCarData: ShopCarService, private shopCarIcon: TopbarComponent ) {
-  }
+              private shopRouter: Router, public shopCarData: ShopCarService, private shopCarIcon: TopbarComponent) { }
 
   ngOnInit() {
     this.loadingProdsAndShopcar();

@@ -4,13 +4,12 @@ import { BehaviorSubject } from 'rxjs';
 import { DataService } from './data-service.service';
 import { GetSidService } from './get-sid.service';
 import { ShopCar } from '../data-model/shop-car';
-import { Product } from '../data-model/product';
+import { TopbarComponent } from '../components/main-view/topbar/topbar.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShopCarService {
-  public listProds: Product[];
   public userCar: string;
   public error = false;
   public msgerr: string;
@@ -20,14 +19,13 @@ export class ShopCarService {
   public badgeNum: BehaviorSubject<number> = new BehaviorSubject<number>(0) ;
   public showBadge: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-  constructor(private dataService: DataService, private userSid: GetSidService, private barNotice: MatSnackBar ) {
+  constructor(private dataService: DataService, private userSid: GetSidService, private barNotice: MatSnackBar) {
     this.initService();
   }
 
   initService() {
     const sid: string = this.userSid.sendSid();
     this.getShopCarData(sid);
-    this.gettingDataProds(sid);
   }
 
   getShopCarData(sid: string) {
@@ -41,8 +39,8 @@ export class ShopCarService {
     }).finally(() => {
       if (response.msgerr) {
         this.msgerr = response.msgerr;
-        console.log(this.msgerr);
-        throw response.error;
+        this.failMsg(this.msgerr, sid);
+        this.error = true;
       } else {
         this.error = false;
         this.userCar = response.username;
@@ -54,16 +52,6 @@ export class ShopCarService {
     });
   }
 
-  gettingDataProds(sid: string) {
-    const dataProds = this.dataService.getProducts(sid);
-    dataProds.then(res => {
-      this.listProds = res.body;
-    }).catch(err => {
-      console.error(err);
-    }).finally(() => {
-    });
-  }
-
   pushProduct2Car(sid: string, idProd: string, prcProd: number, qtProd: number, newStk: number) {
     const order = this.shopCar.order;
     const prodCar = { id: idProd, price: prcProd, quantt: qtProd };
@@ -72,7 +60,7 @@ export class ShopCarService {
       if (findIt < 0) {
         this.shopCar.addProduct(prodCar);
         this.dataService.addProd2Car(sid, order, prodCar, newStk).then(res => {
-          this.successAdding(res.body.msgscs, sid);
+          this.successMsg(res.body.msgscs, sid);
           if (res.error) { throw res.error; }
         }).catch(err => {
           console.error(err);
@@ -81,7 +69,7 @@ export class ShopCarService {
         const prodUpd = this.shopCar.updProduct(findIt, prcProd);
         const newQt = (prodUpd.newQtt + qtProd);
         this.dataService.updProdInCar(sid, order, findIt, idProd, prcProd, newQt, newStk).then(res => {
-          this.successAdding(res.body.msgscs, sid);
+          this.successMsg(res.body.msgscs, sid);
           if (res.error) { throw res.error; }
         }).catch(err => {
           console.error(err);
@@ -93,8 +81,39 @@ export class ShopCarService {
     }
   }
 
-  successAdding(msg: string, sid: string) {
+  popProductFromCar(sid: string, idProd: string, qtProd: number) {
+    const order = this.shopCar.order;
+    try {
+      const findIt = this.shopCar.findProduct(idProd);
+      this.shopCar.delProduct(findIt);
+      this.dataService.getShowProduct(sid, idProd).then(resp => {
+        const currentQt = resp.body.stock;
+        const newStock = currentQt + qtProd;
+        this.dataService.delProdFromCar(sid, order, idProd, newStock).then(res => {
+          if (!res.body.msgerr) {
+            this.successMsg(res.body.msgscs, sid);
+          } else {
+            this.failMsg(res.body.msgerr, sid);
+          }
+        }).catch(err => {
+          console.error(err);
+        });
+      }).catch(error => {
+        console.error(error);
+      });
+    } catch (error) {
+      console.log(error);
+      this.error = true;
+    }
+  }
+
+  successMsg(msg: string, sid: string) {
     this.barNotice.open(msg, '', { duration: 1500, panelClass: 'notice-bar-success' });
     this.getShopCarData(sid);
   }
+
+  failMsg(msg: string, sid: string) {
+    this.barNotice.open(msg, '', { duration: 1500, panelClass: 'notice-bar-error' });
+  }
+
 }
