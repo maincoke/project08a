@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataService } from './data-service.service';
 import { GetSidService } from './get-sid.service';
 import { ShopCar } from '../data-model/shop-car';
-import { TopbarComponent } from '../components/main-view/topbar/topbar.component';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +14,14 @@ export class ShopCarService {
   public msgerr: string;
   public msgscs: string;
   public shopCar: ShopCar = new ShopCar();
-  public prodsQtt: number;
-  public badgeNum: BehaviorSubject<number> = new BehaviorSubject<number>(0) ;
+  public prodsQtt = 0;
+  public badgeNum: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public showBadge: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   constructor(private dataService: DataService, private userSid: GetSidService, private barNotice: MatSnackBar) {
     this.initService();
+    this.badgeNum = new BehaviorSubject<number>(this.prodsQtt);
+    this.showBadge = new BehaviorSubject<boolean>(this.prodsQtt > 0 ? false : true);
   }
 
   initService() {
@@ -29,18 +30,18 @@ export class ShopCarService {
   }
 
   getShopCarData(sid: string) {
-    const dataShopcar = this.dataService.getShopCarProds(sid);
     let response: any;
-    dataShopcar.then(res  => {
+    const dataShopcar = this.dataService.getShopCarProds(sid);
+    return dataShopcar.then(res  => {
       response = res.body;
     }).catch(err => {
       console.error(err);
       this.error = true;
     }).finally(() => {
       if (response.msgerr) {
+        this.error = true;
         this.msgerr = response.msgerr;
         this.failMsg(this.msgerr, sid);
-        this.error = true;
       } else {
         this.error = false;
         this.userCar = response.username;
@@ -75,6 +76,7 @@ export class ShopCarService {
           console.error(err);
         });
       }
+      return findIt;
     } catch (error) {
       console.log(error);
       this.error = true;

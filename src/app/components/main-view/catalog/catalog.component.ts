@@ -59,7 +59,8 @@ export class CatalogComponent implements OnInit {
     this.stockChanger.subscribe(stockvalue =>  prod.stock = stockvalue );
     this.stockChanger.next(stocknow);
     const sid: string = this.userSid.sendSid();
-    this.shopCarData.pushProduct2Car(sid, prod._id, prod.price, prodQtt, stocknow);
-    this.shopCarIcon.setIconBadge();
+    const prodAdd = this.shopCarData.pushProduct2Car(sid, prod._id, prod.price, prodQtt, stocknow) < 0 ? 1 : 0;
+    this.shopCarIcon.setBadgeOnAdd(prodAdd);
   }
+
 }

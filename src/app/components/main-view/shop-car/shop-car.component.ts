@@ -20,6 +20,7 @@ export class ShopCarComponent implements OnInit {
   public listProds: Product[];
   public listProdsCar: ProdsCar[] = new Array;
   public totalCar: number;
+  public totalChk: string;
   constructor(private userSid: GetSidService, public shopCarData: ShopCarService, public dataService: DataService,
               private renderizer: Renderer2, private barNotice: MatSnackBar, private shopRouter: Router,
               private shopCarIcon: TopbarComponent) { }
@@ -65,7 +66,7 @@ export class ShopCarComponent implements OnInit {
         if (prodcar.id === prod._id && findIt >= 0) {
           this.listProdsCar.push({ id: prodcar.id, name: prod.name, img: prod.image, price: prodcar.price,
                               quantt: prodcar.quantt, subcheck: prodcar.price * prodcar.quantt });
-          this.totalCar = this.totalCar + this.listProdsCar[pidx].subcheck;
+          this.totalChk = this.showTotalItem(this.totalCar += this.listProdsCar[pidx].subcheck);
         }
       });
     });
@@ -75,9 +76,20 @@ export class ShopCarComponent implements OnInit {
     const parentList = this.renderizer.parentNode(document.getElementById(idxProd));
     const sid: string = this.userSid.sendSid();
     this.renderizer.removeChild(parentList, document.getElementById(idxProd));
+    this.totalChk = this.showTotalItem(this.totalCar -= this.listProdsCar[idxProd].subcheck);
     this.listProdsCar.splice(idxProd, 1);
     this.shopCarData.popProductFromCar(sid, prodId, qtProd);
-    this.shopCarIcon.setIconBadge();
+    this.shopCarIcon.setBadgeOnDeduct(this.listProdsCar.length);
+  }
+
+  showTotalItem(numTotal: number) { return numTotal.toPrecision(this.integersCount(numTotal) + 1); }
+
+  integersCount(num: number) {
+    let int = 0;
+    if (num >= 1) { ++int; }
+    while (num / 10 >= 1) { num /= 10; ++int; }
+    return int;
   }
 
 }
+
