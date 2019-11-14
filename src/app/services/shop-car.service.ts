@@ -53,6 +53,8 @@ export class ShopCarService {
     });
   }
 
+  buyProductsCar(sid: string) {  }
+
   pushProduct2Car(sid: string, idProd: string, prcProd: number, qtProd: number, newStk: number) {
     const order = this.shopCar.order;
     const prodCar = { id: idProd, price: prcProd, quantt: qtProd };
@@ -116,6 +118,15 @@ export class ShopCarService {
 
   failMsg(msg: string, sid: string) {
     this.barNotice.open(msg, '', { duration: 1500, panelClass: 'notice-bar-error' });
+  }
+
+  showTotalItem(numTotal: number) { return numTotal.toPrecision(this.integersCount(numTotal) + 1); }
+
+  integersCount(num: number) {
+    let int = 0;
+    if (num >= 1) { ++int; }
+    while (num / 10 >= 1) { num /= 10; ++int; }
+    return int;
   }
 
 }

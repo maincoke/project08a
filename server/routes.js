@@ -79,8 +79,7 @@ Router.post('/login', function(req, res) {
       console.error('===>>> Error en la sesión del usuario: \n' + error);
     });
   }).catch(error => {
-    let wrong = { access: false, msg: 'Cuenta de usuario no se encuentra registrada!!' };
-    res.send(wrong);
+    res.send({ access: false, msg: 'Cuenta de usuario no se encuentra registrada!!' });
     console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });
@@ -114,20 +113,16 @@ Router.post('/newuser', function(req, res) {
           shopcar: [{ order: newuuid1(), paidod: false }]
         });
         newuser.save().then(doc => {
-          let result = { msgscs: "Usuario registrado con éxito!!" };
-          res.send(result);
+          res.send({ msgscs: "Usuario registrado con éxito!!" });
         }).catch(function(error) {
-          let wrong = { msgerr: "Hubo un error en el registro de usuario!!" };
-          res.send(wrong);
+          res.send({ msgerr: "Hubo un error en el registro de usuario!!" });
           console.error('===>>> Error en el registro de usuario: ');
         });
       }).catch(function(error) {
-          let wrong = { msgerr: "Error: La contraseña no se logró generar con éxito!!" };
-          res.send(wrong);
+          res.send({ msgerr: "Error: La contraseña no se logró generar con éxito!!" });
       });
     } else {
-      let wrong = JSON.stringify({ msgerr: "La cuenta con la dirección de correo " + username + ",\n ya se encuentra registrada!!" });
-      res.send(wrong);
+      res.send(JSON.stringify({ msgerr: "La cuenta con la dirección de correo " + username + ",\n ya se encuentra registrada!!" }));
     }
   });
 });
@@ -143,14 +138,12 @@ Router.post('/newprod', function(req, res) {
         let success = { id: product.id, msgscs: "Producto agregado al carrito!!" };
         res.send(success);
       } else {
-        let wrong = { msgerr: 'Hubo un error al agregar el producto!!' };
-        res.send(wrong);
+        res.send({ msgerr: 'Hubo un error al agregar el producto!!' });
         console.error('===>>> Error en la inclusión del producto: \n' + error);
       }
     });
   }).catch(error => {
-    let wrong = { msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' };
-    res.send(wrong);
+    res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
     console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });
@@ -180,7 +173,7 @@ Router.post('/updateprod/:id', function(req, res) {
 Router.post('/deleteprod/:id', function(req, res) {
   this.getSession(req.body.sid).then(sessusr => {
     User.updateOne({ emailusr: sessusr.username, "shopcar.paidod": false, "shopcar.products.id": objectId(req.params.id) },
-    { "$pull": { "shopcar.0.products": { id: objectId(req.params.id) }}}, (error, doc) => {
+    { "$pull": { "shopcar.$.products": { id: objectId(req.params.id) }}}, (error, doc) => {
       if (!error) {
          updStockProd(req.params.id, req.body.newstk);
          res.send({ msgscs: 'Producto sacado del carrito con éxito!!'});
@@ -198,10 +191,11 @@ Router.post('/deleteprod/:id', function(req, res) {
 // *** Obtención de todos los productos del Carrito del usuario la Tienda Online *** //
 Router.post('/shopcar', function(req, res) {
   this.getSession(req.body.sid).then(sessusr => {
-    User.findOne({ emailusr: sessusr.username, "shopcar.paidod": false }).exec().then(doc  => {
-      let dataCar = { username: doc.emailusr, order: doc.shopcar[0].order, paidod: doc.shopcar[0].paidod };
-      if (doc.shopcar[0].products.length != 0) {
-        dataCar.shopcarProds =  doc.shopcar[0].products;
+    User.findOne({ emailusr: sessusr.username, 'shopcar.paidod': false }).exec().then(doc => {
+      const docIdx = doc.shopcar.findIndex((doc) => doc.paidod === false);
+      let dataCar = { username: doc.emailusr, order: doc.shopcar[docIdx].order, paidod: doc.shopcar[docIdx].paidod };
+      if (doc.shopcar[docIdx].products.length != 0) {
+        dataCar.shopcarProds =  doc.shopcar[docIdx].products;
       } else {
         dataCar.shopcarProds =  new Array;
       }
@@ -214,6 +208,25 @@ Router.post('/shopcar', function(req, res) {
   }).catch(error => {
     let wrong = { msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' };
     res.send(wrong);
+    console.error('===>>> Error en la autenticación del usuario: \n' + error);
+  });
+});
+
+// *** Actualización de Compra y Pago del Carrito de Usuario en la Tienda Online *** //
+Router.post('/purchase/:id', function(req, res) {
+  this.getSession(req.body.sid).then(sessusr => {
+    User.updateOne({ emailusr: sessusr.username, 'shopcar.paidod': false, 'shopcar.order': req.params.id },
+    { $set: { 'shopcar.$.paidod': true }}, (error, doc) => {
+      if (!error) {
+        res.send({ msgscs: 'Compra realizada y Carrito actualizado con éxito!!'});
+        User.updateOne({ emailusr: sessusr.username }, { '$push': { shopcar: { order: newuuid1(), paidod: false, products: [] }}}).exec();
+      } else {
+        res.send({ msgerr: 'Hubo un error al comprar los productos del Carrito!!'});
+        console.error('===>>> Error en la compra del Carrito: \n' + error);
+      }
+    });
+  }).catch(error => {
+    res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
     console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });
@@ -244,13 +257,36 @@ Router.post('/catalog', function(req, res) {
       let prodsData = docs;
       res.send(prodsData);
     }).catch(error => {
-      let wrong = { msgerr: 'Hubo un error en la obtención de productos!!' };
-      res.send(wrong);
+      res.send({ msgerr: 'Hubo un error en la obtención de productos!!' });
       console.error('===>>> Error en la obtención de productos:  \n' + error);
     });
   }).catch(error => {
-    let wrong = { msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' };
-    res.send(wrong);
+    res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
+    console.error('===>>> Error en la autenticación del usuario: \n' + error);
+  });
+});
+
+// *** Obtención de todas las Compras de Carrito realizadas de la Tienda Online *** //
+Router.post('/shopping', function(req, res) {
+  this.getSession(req.body.sid).then(sessusr => {
+    if (sessusr.error) throw sessusr.error
+    User.findOne({ emailusr: sessusr.username, 'shopcar.paidod': true }).exec().then(doc  => {
+      if (!doc.error) {
+        let dataCars = { username: doc.emailusr, fullname: doc.nameuser };
+        const shoppingCars = doc.shopcar.filter(doc => doc.paidod !== false);
+        if (shoppingCars.length != 0) {
+          dataCars.shopCars =  shoppingCars;
+        } else {
+          dataCars.shopCars =  new Array;
+        }
+        res.send(dataCars);
+      } else { throw doc.error }
+    }).catch(error  => {
+      res.send({ msgerr: 'No se han realizado compras de carrito!!' });
+      console.error('===>>> Error en la consulta de las compras:  \n' + error);
+    });
+  }).catch(error => {
+    res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
     console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });

@@ -21,7 +21,7 @@ export class ShopCarComponent implements OnInit {
   public listProdsCar: ProdsCar[] = new Array;
   public totalCar: number;
   public totalChk: string;
-  constructor(private userSid: GetSidService, public shopCarData: ShopCarService, public dataService: DataService,
+  constructor(private userSid: GetSidService, public shopCarSrv: ShopCarService, public dataService: DataService,
               private renderizer: Renderer2, private barNotice: MatSnackBar, private shopRouter: Router,
               private shopCarIcon: TopbarComponent) { }
 
@@ -36,9 +36,9 @@ export class ShopCarComponent implements OnInit {
       this.userSid.clearSid();
       this.shopRouter.navigate([ 'salir' ]);
     }
-    this.shopCarData.getShopCarData(sid);
-    if (!this.shopCarData.error && sid) {
-      this.shopcarProds = this.shopCarData.shopCar;
+    this.shopCarSrv.getShopCarData(sid);
+    if (!this.shopCarSrv.error && sid) {
+      this.shopcarProds = this.shopCarSrv.shopCar;
       this.shopCarIcon.setIconBadge();
       const dataProds = this.dataService.getProducts(sid);
       dataProds.then(resp => {
@@ -49,9 +49,11 @@ export class ShopCarComponent implements OnInit {
         this.bindingDataCarProds();
       });
     } else {
-      console.log(this.shopCarData.error);
-      if (this.shopCarData.msgerr) {
-        this.barNotice.open(this.shopCarData.msgerr, '', { duration: 4000, panelClass: 'notice-bar-error' });
+      console.log(this.shopCarSrv.error);
+      if (this.shopCarSrv.msgerr) {
+        this.barNotice.open(this.shopCarSrv.msgerr, '', { duration: 4000, panelClass: 'notice-bar-error' });
+        this.userSid.clearSid();
+        this.shopRouter.navigate([ 'salir' ]);
       }
     }
   }
@@ -59,37 +61,55 @@ export class ShopCarComponent implements OnInit {
   bindingDataCarProds() {
     this.listProdsCar = new Array;
     this.totalCar = 0;
-    const sid = this.userSid.sendSid();
     this.shopcarProds.products.forEach((prodcar: {id: string; price: number; quantt: number}, pidx: number) => {
       const findIt = this.shopcarProds.findProduct(prodcar.id);
       this.listProds.forEach((prod: Product) => {
         if (prodcar.id === prod._id && findIt >= 0) {
           this.listProdsCar.push({ id: prodcar.id, name: prod.name, img: prod.image, price: prodcar.price,
                               quantt: prodcar.quantt, subcheck: prodcar.price * prodcar.quantt });
-          this.totalChk = this.showTotalItem(this.totalCar += this.listProdsCar[pidx].subcheck);
+          this.totalChk = this.shopCarSrv.showTotalItem(this.totalCar += this.listProdsCar[pidx].subcheck);
         }
       });
     });
+  }
+
+  purchaseShopCar() {
+    const sid = this.userSid.sendSid();
+    const shopCarOrder = this.shopCarSrv.shopCar.order;
+    const buyIt = this.barNotice.open('Está usted seguro de realizar la compra de los productos de este carriro?', 'Comprar',
+                                      { panelClass: 'notice-bar-success'});
+    // confirm('Está usted seguro de realizar la compra de los productos de este carriro?');
+    if (buyIt) {
+      this.dataService.purchaseCar(sid, shopCarOrder).then(res => {
+        if (!res.body.msgerr) {
+          this.barNotice.open(res.body.msgscs, '', { duration: 1500, panelClass: 'notice-bar-success'});
+        } else {
+          this.barNotice.open(res.body.msgerr, '', { duration: 1500, panelClass: 'notice-bar-error'});
+        }
+      }).catch(err => {
+        console.error(err);
+      });
+    }
   }
 
   removeProdCar(idxProd: any, prodId: any, qtProd: any) {
     const parentList = this.renderizer.parentNode(document.getElementById(idxProd));
     const sid: string = this.userSid.sendSid();
     this.renderizer.removeChild(parentList, document.getElementById(idxProd));
-    this.totalChk = this.showTotalItem(this.totalCar -= this.listProdsCar[idxProd].subcheck);
+    this.totalChk = this.shopCarSrv.showTotalItem(this.totalCar -= this.listProdsCar[idxProd].subcheck);
     this.listProdsCar.splice(idxProd, 1);
-    this.shopCarData.popProductFromCar(sid, prodId, qtProd);
+    this.shopCarSrv.popProductFromCar(sid, prodId, qtProd);
     this.shopCarIcon.setBadgeOnDeduct(this.listProdsCar.length);
   }
 
-  showTotalItem(numTotal: number) { return numTotal.toPrecision(this.integersCount(numTotal) + 1); }
+  /*showTotalItem(numTotal: number) { return numTotal.toPrecision(this.integersCount(numTotal) + 1); }
 
   integersCount(num: number) {
     let int = 0;
     if (num >= 1) { ++int; }
     while (num / 10 >= 1) { num /= 10; ++int; }
     return int;
-  }
+  }*/
 
 }
 

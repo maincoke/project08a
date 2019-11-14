@@ -54,4 +54,14 @@ export class DataService {
     const dataProd = JSON.stringify({ sid: sidUser, order: ordCar, newstk: newStk });
     return request.post(this.urlSvrData + '/deleteprod/' + prodId).type('application/json').responseType('json').send(dataProd);
   }
+
+  public getPurchases(sidUser: string) {
+    const sid = JSON.stringify({ sid: sidUser });
+    return request.post(this.urlSvrData + '/shopping').type('application/json').responseType('json').send(sid);
+  }
+
+  public purchaseCar(sidUser: string, ordCar: string) {
+    const sid = JSON.stringify({ sid: sidUser });
+    return request.post(this.urlSvrData + '/purchase/' + ordCar).type('application/json').responseType('json').send(sid);
+  }
 }

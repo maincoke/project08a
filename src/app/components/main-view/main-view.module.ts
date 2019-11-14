@@ -15,6 +15,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatListModule } from '@angular/material/list';
+import { MatTreeModule } from '@angular/material/tree';
+
 
 import { DataService } from '../../services/data-service.service';
 import { ProdSearchPipe } from '../../services/prod-search.pipe';
@@ -43,13 +45,13 @@ import { PurchasesComponent } from './purchases/purchases.component';
     MatIconModule, MatDialogModule, MatDividerModule,
     MatSnackBarModule, MatToolbarModule, MatCardModule,
     MatBadgeModule, MatListModule, MatTooltipModule,
-    MainViewRoutingModule
+    MainViewRoutingModule, MatTreeModule
   ],
   exports: [
     MatFormFieldModule, MatInputModule, MatButtonModule, MatButtonToggleModule,
     MatIconModule, MatDividerModule, MatDialogModule, MatSnackBarModule,
     MatToolbarModule, MatCardModule, MatBadgeModule, MatListModule,
-    MatTooltipModule
+    MatTooltipModule, MatTreeModule
   ],
   providers: [ DataService, TopbarComponent ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
