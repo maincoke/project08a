@@ -34,35 +34,33 @@ export class PurchasesComponent implements OnInit {
 
   loadPurchases() {
     const sid = this.userSid.sendSid();
-    if (sid !== null) {
-      let uname: string; let umail: string;
-      this.dataService.getPurchases(sid).then(res => {
-        if (!res.body.msgerr) {
-          uname = res.body.fullname;
-          umail = res.body.username;
-          this.dataPurchase = res.body.shopCars;
-        } else {
-          if (res.body.msgerr) {
-            this.barNotice.open(res.body.msgerr, '', { duration: 2000, panelClass: 'notice-bar-error'});
-            this.shopRouter.navigate([ 'salir' ]);
-          }
-        }
-      }).catch(err => {
-        console.error('Error en la respuesta Compras: -->' + err);
-      }).finally(() => {
+    let uname: string; let umail: string;
+    this.dataService.getPurchases(sid).then(res => {
+      if (!res.body.msgerr) {
+        uname = res.body.fullname;
+        umail = res.body.username;
+        this.dataPurchase = res.body.shopCars;
+      } else {
+        this.barNotice.open(res.body.msgerr, '', { duration: 2000, panelClass: 'notice-bar-error'});
+        throw res.error;
+      }
+    }).catch(err => {
+      if (sid != null) { this.userSid.clearSid(); }
+      this.shopRouter.navigate([ 'salir' ]);
+    }).finally(() => {
+      if (this.dataPurchase !== undefined) {
         this.dataService.getProducts(sid).then(resp => {
+          if (resp.body.msgerr) { throw resp.error; }
           this.productsShop = resp.body;
         }).catch(error => {
-          console.error('Error en la respuesta Productos: -->' + error);
+          if (sid != null) { this.userSid.clearSid(); }
+          this.shopRouter.navigate([ 'salir' ]);
         }).finally(() => {
           this.purchaseSrv.purchasesNew.next((this.purchaseSrv.buildPurchasesTree(
             this.purchaseSrv.buildShopcarsData(this.dataPurchase, this.productsShop, { usern: uname, userm: umail }))));
         });
-      });
-    } else {
-      this.userSid.clearSid();
-      this.shopRouter.navigate([ 'salir' ]);
-    }
+      }
+    });
   }
 
   hasNested(_: number, node: PurchaseNode) { return !!node.nodenested && node.nodenested.length > 0; }

@@ -37,7 +37,7 @@ const userSession = session({
   resave: false,
   rolling: true,
   saveUninitialized: false,
-  cookie: { maxAge: 1200000 },
+  cookie: { maxAge: 1800000 },
   store: new mongoSession({ mongooseConnection: db })
 });
 shop.use(userSession);

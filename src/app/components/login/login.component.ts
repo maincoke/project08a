@@ -47,7 +47,6 @@ export class LoginComponent implements AfterViewChecked {
           barClass = 'notice-bar-error';
           this.barNotice.open(result, '', { duration: 4000, panelClass: barClass });
         } else {
-          // Enrutar hacia la pagina de productos y carrito //////// ****** ////// ****** ///////
           barClass = 'notice-bar-success';
           this.barNotice.open('Usuario autenticado!!', '', { duration: 3000, panelClass: barClass });
           this.shopRouter.navigate([ 'bodega/catalogo' ]);
@@ -70,10 +69,6 @@ export class LoginComponent implements AfterViewChecked {
       closeOnNavigation: false,
       autoFocus: false,
     });
-
-    /* singupDialog.afterClosed().subscribe(result => {
-      console.log('Se cerró la ventana de dialogo!!');
-    });*/
   }
 
   disablingBtn() {

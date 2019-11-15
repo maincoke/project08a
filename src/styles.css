@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+/* Estilos Globales para los elementos personalizados y forzado de algunos estilos */
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
 
 html, body {
@@ -53,6 +53,12 @@ body {
   color: #1a7000 !important;
   font-weight: bolder;
   background: #5fc777 !important;
+}
+
+.notice-bar-check {
+  color: white !important;
+  font-weight: bolder;
+  background: #607d8b !important;
 }
 
 .tooltip-topbar {

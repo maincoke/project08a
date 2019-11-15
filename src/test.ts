@@ -1,4 +1,5 @@
-// This file is required by karma.conf.js and loads recursively all the .spec and framework files
+/* Este es el archivo que requiere karma.conf.js y carga recursivamente todos
+  los archivos .spec y modulos del Framework */
 
 import 'zone.js/dist/zone-testing';
 import { getTestBed } from '@angular/core/testing';
@@ -9,12 +10,12 @@ import {
 
 declare const require: any;
 
-// First, initialize the Angular testing environment.
+// Primero, se inicializa el Ambiente de Prueba de Angular.
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting()
 );
-// Then we find all the tests.
+// Despues se encuentran todas las pruebas.
 const context = require.context('./', true, /\.spec\.ts$/);
-// And load the modules.
+// Y luego se cargos los módulos.
 context.keys().map(context);

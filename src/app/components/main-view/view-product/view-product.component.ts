@@ -26,12 +26,10 @@ export class ViewProductComponent implements OnInit {
         throw res.error;
       } else {
         this.prodShowData = res.body;
-        // Realizar la carga del Producto a mostrar //
       }
     }).catch(err => {
       if (sid != null) { this.userSid.clearSid(); }
       this.shopRouter.navigate([ 'salir' ]);
     });
   }
-
 }

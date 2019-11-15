@@ -7,8 +7,8 @@ const rootRoutes: Routes = [
   { path: 'inicio', component: LoginComponent },
   { path: 'bodega', redirectTo: 'bodega', pathMatch: 'full' },
   { path: 'salir', component: LogoutComponent },
-  { path: '', redirectTo: 'inicio', pathMatch: 'full' }
-  // { path: '**', redirectTo: 'bodega/catalogo' }
+  { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+  { path: '**', redirectTo: 'bodega/catalogo' }
 ];
 
 @NgModule({

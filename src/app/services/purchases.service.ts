@@ -45,23 +45,23 @@ export class PurchasesService {
       let tagProp: string; let classProp: string[]; let attProp: any; let bgCar: string; let propProd: string;
       const node1 = new PurchaseNode();
       bgCar = idx % 2 === 0 ? 'bg-info' : 'bg-dark';
-      const carsHeader: HTMLElement = this.htmlConverter(null, 'div', ['flex-row']);
-      classProp = ['text-capitalize', 'font-weight-normal', 'text-light', 'p-2', 'float-left', bgCar ];
+      const carsHeader: HTMLElement = this.htmlConverter(null, 'div', ['flex-row', 'mt-2']);
+      classProp = ['text-capitalize', 'font-weight-normal', 'text-light', 'p-1', 'float-left', 'rounded', bgCar];
       const carsTitle: HTMLElement = this.htmlConverter('carrito N° ' + shopcar.numcar.toString(), 'h4', classProp);
-      classProp = ['text-capitalize', 'font-weight-normal', 'text-danger', 'p-2', 'float-right', 'bg-light', 'mr-header' ];
+      classProp = ['text-capitalize', 'font-weight-normal', 'text-muted', 'rounded', 'p-1', 'float-right', 'bg-light', 'mr-header'];
       const totalCheck: HTMLElement = this.htmlConverter('compra total: $ ' + shopcar.totalCar.toString(), 'h4', classProp);
       carsHeader.appendChild(carsTitle).appendChild(totalCheck);
       node1.nodename = carsHeader;
       if (shopcar.products !== undefined) {
         node1.nodenested = shopcar.products.map<PurchaseNode>((prod) => {
           const node2 = new PurchaseNode();
-          classProp = ['text-capitalize', 'font-weight-bold', 'text-light', 'bg-secondary', 'p-2'];
+          classProp = ['text-capitalize', 'font-weight-bold', 'text-light', 'rounded', 'bg-secondary', 'p-1'];
           node2.nodename =  this.htmlConverter(prod.name, 'h5', classProp);
           node2.nodenested = [prod.img, prod.price.toString(), prod.quantt.toString(), prod.subcheck.toString()].map<PurchaseNode>((prop, i) => {
             const node3 = new PurchaseNode();
             propProd = i === 0 ? '' : i === 1 ? 'Precio: $ ' + prop : i === 2 ? 'Cantidad: ' + prop : 'Subtotal: $ ' + prop;
             tagProp = i === 0 ? 'img' : 'h6';
-            classProp = i === 0 ? [ 'mw-100', 'img-thumbnail' ] : ['font-weight-bold', 'ml-5'];
+            classProp = i === 0 ? [ 'mw-100', 'img-thumbnail' ] : ['font-weight-bold', 'ml-5', 'p-1', 'm-1'];
             attProp = i === 0 ? [['src', prop], ['width', '100vw']] : ['h6'];
             node3.nodename = i !== 0 ? this.htmlConverter(propProd, tagProp, classProp) :
                                        this.htmlConverter(null, tagProp, classProp, attProp);

@@ -36,12 +36,11 @@ updStockProd = (idprod, newQtt) => {
   Product.updateOne({ _id: objectId(idprod) }, { $set: { stock: newQtt}}, (error, doc) => {
     if (error) {
       res.send({ msgerr: 'Hubo un error al actualizar las Unidades del producto!!'});
-      console.error('===>>> Error en la actualización del Stock del producto: \n' + error);
     }
   });
 }
 
-// Habilitación de CORS en las solicitudes de datos entre Servidores // ************************ Rutas Get/Post *************************************
+// Habilitación de CORS en las solicitudes de datos entre Servidores // *************** Rutas Get/Post ************************
 Router.all('/', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -80,7 +79,6 @@ Router.post('/login', function(req, res) {
     });
   }).catch(error => {
     res.send({ access: false, msg: 'Cuenta de usuario no se encuentra registrada!!' });
-    console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });
 
@@ -139,12 +137,10 @@ Router.post('/newprod', function(req, res) {
         res.send(success);
       } else {
         res.send({ msgerr: 'Hubo un error al agregar el producto!!' });
-        console.error('===>>> Error en la inclusión del producto: \n' + error);
       }
     });
   }).catch(error => {
     res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
-    console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });
 
@@ -160,12 +156,10 @@ Router.post('/updateprod/:id', function(req, res) {
         res.send({ msgscs: 'Cantidad y precio actualizados con éxito!!'});
       } else {
         res.send({ msgerr: 'Hubo un error al actualizar los datos del producto!!'});
-        console.error('===>>> Error en la actualización del producto en el carrito: \n' + error);
       }
     });
   }).catch(error => {
     res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
-    console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });
 
@@ -179,12 +173,10 @@ Router.post('/deleteprod/:id', function(req, res) {
          res.send({ msgscs: 'Producto sacado del carrito con éxito!!'});
       } else {
         res.send({ msgerr: 'Hubo un error al borrar los datos del producto!!'});
-        console.error('===>>> Error en la eliminación del producto en el carrito: \n' + error);
       }
     });
   }).catch(error => {
     res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
-    console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });
 
@@ -201,14 +193,10 @@ Router.post('/shopcar', function(req, res) {
       }
       res.send(dataCar);
     }).catch(error  => {
-      let wrong = { msgerr: 'Hubo un error en obtener los productos del carrito!!' };
-      res.send(wrong);
-      console.error('===>>> Error en la consulta del carrito:  \n' + error);
+      res.send({ msgerr: 'Hubo un error en obtener los productos del carrito!!' });
     });
   }).catch(error => {
-    let wrong = { msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' };
-    res.send(wrong);
-    console.error('===>>> Error en la autenticación del usuario: \n' + error);
+    res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
   });
 });
 
@@ -222,12 +210,10 @@ Router.post('/purchase/:id', function(req, res) {
         User.updateOne({ emailusr: sessusr.username }, { '$push': { shopcar: { order: newuuid1(), paidod: false, products: [] }}}).exec();
       } else {
         res.send({ msgerr: 'Hubo un error al comprar los productos del Carrito!!'});
-        console.error('===>>> Error en la compra del Carrito: \n' + error);
       }
     });
   }).catch(error => {
     res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
-    console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });
 
@@ -245,7 +231,6 @@ Router.post('/product/:id', function(req, res) {
     });
   }).catch(error => {
     res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
-    console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });
 
@@ -262,7 +247,6 @@ Router.post('/catalog', function(req, res) {
     });
   }).catch(error => {
     res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
-    console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });
 
@@ -283,11 +267,9 @@ Router.post('/shopping', function(req, res) {
       } else { throw doc.error }
     }).catch(error  => {
       res.send({ msgerr: 'No se han realizado compras de carrito!!' });
-      console.error('===>>> Error en la consulta de las compras:  \n' + error);
     });
   }).catch(error => {
     res.send({ msgerr: 'Cuenta de usuario no existe ó expiró la sessión!!' });
-    console.error('===>>> Error en la autenticación del usuario: \n' + error);
   });
 });
 

@@ -23,6 +23,7 @@ export class CatalogComponent implements OnInit {
               private shopRouter: Router, public shopCarData: ShopCarService, private shopCarIcon: TopbarComponent) { }
 
   ngOnInit() {
+    console.clear();
     this.loadingProdsAndShopcar();
   }
 
@@ -37,7 +38,6 @@ export class CatalogComponent implements OnInit {
         this.products = res.body;
         this.shopCarData.getShopCarData(sid);
         if (this.shopCarData.error) {
-          console.log(this.shopCarData.error);
           if (this.shopCarData.msgerr) {
             this.barNotice.open(this.shopCarData.msgerr, '', { duration: 4000, panelClass: 'notice-bar-error' });
           }

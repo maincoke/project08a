@@ -26,35 +26,30 @@ export class ShopCarComponent implements OnInit {
               private shopCarIcon: TopbarComponent) { }
 
   ngOnInit() {
-    console.clear();
     this.loadingShopcar();
   }
 
   loadingShopcar() {
     const sid: string = this.userSid.sendSid();
-    if (sid === null) {
-      this.userSid.clearSid();
-      this.shopRouter.navigate([ 'salir' ]);
-    }
     this.shopCarSrv.getShopCarData(sid);
     if (!this.shopCarSrv.error && sid) {
       this.shopcarProds = this.shopCarSrv.shopCar;
       this.shopCarIcon.setIconBadge();
       const dataProds = this.dataService.getProducts(sid);
       dataProds.then(resp => {
+        if (resp.body.msgerr) { throw resp.error; }
         this.listProds = resp.body;
       }).catch(err => {
         console.error(err);
+        if (sid != null) { this.userSid.clearSid(); }
+        this.shopRouter.navigate([ 'salir' ]);
       }).finally(() => {
         this.bindingDataCarProds();
       });
     } else {
-      console.log(this.shopCarSrv.error);
-      if (this.shopCarSrv.msgerr) {
-        this.barNotice.open(this.shopCarSrv.msgerr, '', { duration: 4000, panelClass: 'notice-bar-error' });
-        this.userSid.clearSid();
-        this.shopRouter.navigate([ 'salir' ]);
-      }
+      this.barNotice.open(this.shopCarSrv.msgerr, '', { duration: 4000, panelClass: 'notice-bar-error' });
+      this.userSid.clearSid();
+      this.shopRouter.navigate([ 'salir' ]);
     }
   }
 
@@ -75,13 +70,16 @@ export class ShopCarComponent implements OnInit {
 
   purchaseShopCar() {
     const sid = this.userSid.sendSid();
+    const parentList = this.renderizer.parentNode(document.getElementById('0'));
     const shopCarOrder = this.shopCarSrv.shopCar.order;
     const buyIt = this.barNotice.open('Está usted seguro de realizar la compra de los productos de este carriro?', 'Comprar',
-                                      { panelClass: 'notice-bar-success'});
-    // confirm('Está usted seguro de realizar la compra de los productos de este carriro?');
-    if (buyIt) {
+                  { panelClass: 'notice-bar-check', duration: 5000 }).onAction();
+    buyIt.subscribe(() => {
       this.dataService.purchaseCar(sid, shopCarOrder).then(res => {
         if (!res.body.msgerr) {
+          parentList.innerHTML = '';
+          this.listProdsCar = new Array;
+          this.shopCarIcon.setIconBadge();
           this.barNotice.open(res.body.msgscs, '', { duration: 1500, panelClass: 'notice-bar-success'});
         } else {
           this.barNotice.open(res.body.msgerr, '', { duration: 1500, panelClass: 'notice-bar-error'});
@@ -89,7 +87,7 @@ export class ShopCarComponent implements OnInit {
       }).catch(err => {
         console.error(err);
       });
-    }
+    });
   }
 
   removeProdCar(idxProd: any, prodId: any, qtProd: any) {
@@ -101,6 +99,4 @@ export class ShopCarComponent implements OnInit {
     this.shopCarSrv.popProductFromCar(sid, prodId, qtProd);
     this.shopCarIcon.setBadgeOnDeduct(this.listProdsCar.length);
   }
-
 }
-
