@@ -102,14 +102,5 @@ export class ShopCarComponent implements OnInit {
     this.shopCarIcon.setBadgeOnDeduct(this.listProdsCar.length);
   }
 
-  /*showTotalItem(numTotal: number) { return numTotal.toPrecision(this.integersCount(numTotal) + 1); }
-
-  integersCount(num: number) {
-    let int = 0;
-    if (num >= 1) { ++int; }
-    while (num / 10 >= 1) { num /= 10; ++int; }
-    return int;
-  }*/
-
 }
 

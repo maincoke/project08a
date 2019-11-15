@@ -9,20 +9,23 @@
     <div class="row">
       <div class="col-12 mt-2 p-2">
         <h4 class="text-center" *ngIf="srcData.data.length === 0">Sin Compras de Carrito realizadas!!</h4>
-        <mat-tree [dataSource]="srcData" [treeControl]="ctrlTree">
+        <mat-tree [dataSource]="srcData" [treeControl]="ctrlTree" class="purchases-tree">
           <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
-            <h3>Carrito N° {{ node.nodename }}</h3>
+            <div [innerHTML]="node.nodename.outerHTML"></div>
           </mat-tree-node>
           <mat-nested-tree-node *matTreeNodeDef="let node; when: hasNested">
             <li>
               <div class="mat-tree-node">
-                <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
-                  <mat-icon class="mat-icon-rtl-mirror">{{ ctrlTree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
-                      <span>{{ node.nodename }}</span><span class="float-right">Cantidad: {{ node.nodename }} </span>
-                      <!--span class="float-right">Total Compra: $ {{ node.subcheck }}</span-->
+                <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.nodename.textContext">
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    {{ ctrlTree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
                   </mat-icon>
                 </button>
+                <div [innerHTML]="node.nodename.outerHTML"></div>
               </div>
+              <ul [class.purchases-tree-invisible]="!ctrlTree.isExpanded(node)">
+                <ng-container matTreeNodeOutlet></ng-container>
+              </ul>
             </li>
           </mat-nested-tree-node>
         </mat-tree>

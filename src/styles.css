@@ -61,8 +61,28 @@ body {
   background: #1598cce5;
 }
 
+.mr-header {
+  margin-left: 400px !important;
+}
+
 @media screen and (min-width: 1560px) {
   body {
     margin-left: 15% !important;
+  }
+
+  .mr-header {
+    margin-left: 600px !important;
+  }
+}
+
+@media screen and (max-width: 1080px) {
+  .mr-header {
+    margin-left: 200px !important;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .mr-header {
+    margin-left: 100px !important;
   }
 }

@@ -8,49 +8,28 @@ import { ShopCar } from '../data-model/shop-car';
 import { Product } from '../data-model/product';
 
 export class ShopcarNode { fullname: string; nameuser: string; numcar: number; products: ProdsCar[]; totalCar: number; }
-export class PurchaseNode { nodename: string; nodenested?: PurchaseNode[]; }
+export class PurchaseNode { nodename: HTMLElement; nodenested?: PurchaseNode[]; }
 
 @Injectable({
   providedIn: 'root'
 })
 export class PurchasesService {
-  private dataPurchase: ShopCar[];
   public purchasesNew: BehaviorSubject<PurchaseNode[]> = new BehaviorSubject<PurchaseNode[]>([]);
   public purchaseData: PurchaseNode[];
 
-  constructor(private dataService: DataService, private userSid: GetSidService, private shopCarSrv: ShopCarService) {
-    this.initService();
-  }
-
-  initService() {
-    const sid = this.userSid.sendSid();
-    let products: []; let uname: string; let umail: string;
-    this.dataService.getPurchases(sid).then(res => {
-      if (!res.body.msgerr) {
-        uname = res.body.fullname;
-        umail = res.body.username;
-        this.dataPurchase = res.body.shopCars;
-        return this.dataService.getProducts(sid).then(resp => {
-          products = resp.body;
-          const nodespurchase = this.buildShopcarsData(this.dataPurchase, products, { usern: uname, userm: umail });
-          this.purchaseData = (this.buildPurchasesTree(nodespurchase, 0));
-          this.purchasesNew.next(this.purchaseData);
-        }).catch(error => { console.error('Error en la respuesta Productos: -->' + error); });
-      } else { console.error(res.body.msgerr); }
-    }).catch(err => { console.error('Error en la respuesta Compras: -->' + err); });
-  }
-
-  sendPurchases(): PurchaseNode[] { return this.purchaseData; }
+  constructor(private dataService: DataService, private userSid: GetSidService, private shopCarSrv: ShopCarService) { }
 
   buildShopcarsData(dataCars: ShopCar[], dataProds: Product[], dataUser: { usern: string, userm: string}): ShopcarNode[] {
-    const nodesShopcar = new Array<ShopcarNode>(); const carProds = new Array<ProdsCar>();
+    const nodesShopcar = new Array<ShopcarNode>(); let carProds = new Array<ProdsCar>(); let prodPurchase: ProdsCar;
     dataCars.forEach((shopcar: ShopCar, sidx: number) => {
       let carCheck = 0; const carNum = sidx + 1;
-      shopcar.products.forEach((prodcar: {id: string; price: number; quantt: number}, pidx) => {
+      carProds = new Array<ProdsCar>();
+      shopcar.products.forEach((prodcar: {id: string; price: number; quantt: number}, pidx: number) => {
+        prodPurchase = {} as ProdsCar;
         dataProds.forEach((prod: Product) => {
           if (prodcar.id === prod._id) {
-            const prodPurchase: ProdsCar = { id: prodcar.id, name: prod.name, img: prod.image, price: prodcar.price,
-                                             quantt: prodcar.quantt, subcheck: prodcar.quantt * prodcar.price };
+            prodPurchase = { id: prodcar.id, name: prod.name, img: prod.image, price: prodcar.price,
+                             quantt: prodcar.quantt, subcheck: prodcar.quantt * prodcar.price };
             carProds.push(prodPurchase);
             carCheck += prodPurchase.subcheck;
           }
@@ -61,17 +40,31 @@ export class PurchasesService {
     return nodesShopcar;
   }
 
-  buildPurchasesTree(object: ShopcarNode[], level: number): PurchaseNode[] {
-    return object.map<PurchaseNode>((shopcar) => {
+  buildPurchasesTree(object: ShopcarNode[]): PurchaseNode[] {
+    return object.map<PurchaseNode>((shopcar, idx) => {
+      let tagProp: string; let classProp: string[]; let attProp: any; let bgCar: string; let propProd: string;
       const node1 = new PurchaseNode();
-      node1.nodename = shopcar.numcar.toString();
+      bgCar = idx % 2 === 0 ? 'bg-info' : 'bg-dark';
+      const carsHeader: HTMLElement = this.htmlConverter(null, 'div', ['flex-row']);
+      classProp = ['text-capitalize', 'font-weight-normal', 'text-light', 'p-2', 'float-left', bgCar ];
+      const carsTitle: HTMLElement = this.htmlConverter('carrito N° ' + shopcar.numcar.toString(), 'h4', classProp);
+      classProp = ['text-capitalize', 'font-weight-normal', 'text-danger', 'p-2', 'float-right', 'bg-light', 'mr-header' ];
+      const totalCheck: HTMLElement = this.htmlConverter('compra total: $ ' + shopcar.totalCar.toString(), 'h4', classProp);
+      carsHeader.appendChild(carsTitle).appendChild(totalCheck);
+      node1.nodename = carsHeader;
       if (shopcar.products !== undefined) {
         node1.nodenested = shopcar.products.map<PurchaseNode>((prod) => {
           const node2 = new PurchaseNode();
-          node2.nodename = prod.name;
-          node2.nodenested = [prod.img, prod.price.toString(), prod.quantt.toString(), prod.subcheck.toString()].map<PurchaseNode>((prop) => {
+          classProp = ['text-capitalize', 'font-weight-bold', 'text-light', 'bg-secondary', 'p-2'];
+          node2.nodename =  this.htmlConverter(prod.name, 'h5', classProp);
+          node2.nodenested = [prod.img, prod.price.toString(), prod.quantt.toString(), prod.subcheck.toString()].map<PurchaseNode>((prop, i) => {
             const node3 = new PurchaseNode();
-            node3.nodename = prop;
+            propProd = i === 0 ? '' : i === 1 ? 'Precio: $ ' + prop : i === 2 ? 'Cantidad: ' + prop : 'Subtotal: $ ' + prop;
+            tagProp = i === 0 ? 'img' : 'h6';
+            classProp = i === 0 ? [ 'mw-100', 'img-thumbnail' ] : ['font-weight-bold', 'ml-5'];
+            attProp = i === 0 ? [['src', prop], ['width', '100vw']] : ['h6'];
+            node3.nodename = i !== 0 ? this.htmlConverter(propProd, tagProp, classProp) :
+                                       this.htmlConverter(null, tagProp, classProp, attProp);
             return node3;
           }, []);
           return node2;
@@ -81,4 +74,11 @@ export class PurchasesService {
     }, []);
   }
 
+  htmlConverter(text: string, typeTag: string, tagClass?: string[], tagAtt?: any): HTMLElement {
+    const htmlElem: HTMLElement = document.createElement(typeTag);
+    htmlElem.innerHTML = text;
+    if (tagAtt) { tagAtt.map((val: string, idx: any, arr: any) => { htmlElem.setAttribute(val[0], val[1]); }); }
+    if (tagClass) { tagClass.map(val => { htmlElem.classList.add(val); }); }
+    return htmlElem;
+  }
 }
