@@ -1,3 +1,4 @@
+/** Especificaciones del Componente de la Vista Principal-UI de la Tienda Online */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MainViewComponent } from './main-view.component';

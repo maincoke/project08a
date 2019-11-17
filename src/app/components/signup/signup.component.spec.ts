@@ -1,3 +1,4 @@
+/** Especificaciones del Componente de Registro de Usuario en la Tienda Online */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SignupComponent } from './signup.component';

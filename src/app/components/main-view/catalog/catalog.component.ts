@@ -1,3 +1,4 @@
+/** Componente de código Typescript para cargar el Catálogo de Productos de la Tienda Online */
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -14,7 +15,7 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.css']
 })
-export class CatalogComponent implements OnInit {
+export class CatalogComponent implements OnInit { // Clase del Componente del Catálogo de Productos de la Tienda Online./
   public products: Product[];
   public prodSearcher: Product = new Product();
   public prodFilter: ProdSearchPipe;
@@ -22,12 +23,12 @@ export class CatalogComponent implements OnInit {
   constructor(private dataService: DataService, private userSid: GetSidService, private barNotice: MatSnackBar,
               private shopRouter: Router, public shopCarData: ShopCarService, private shopCarIcon: TopbarComponent) { }
 
-  ngOnInit() {
+  ngOnInit() { // Método: Se ejecuta para inicializar la carga de datos de los productos del Catálogo./
     console.clear();
     this.loadingProdsAndShopcar();
   }
 
-  loadingProdsAndShopcar() {
+  loadingProdsAndShopcar() { // Evento: Ejecuta la verificación y carga de datos de los productos del Catálogo./
     const sid: string = this.userSid.sendSid();
     this.dataService.getProducts(sid).then(res  => {
       if (res.body.msgerr) {
@@ -52,7 +53,7 @@ export class CatalogComponent implements OnInit {
     });
   }
 
-  addProduct2Car(prod: any, qtProd: any) {
+  addProduct2Car(prod: any, qtProd: any) { // Evento: Se ejecuta al agregar un producto del Catálogo al Carrito de Compras./
     const prodQtt: number = parseFloat(qtProd.value);
     const stocknow: number = prod.stock - prodQtt;
     this.stockChanger =  new BehaviorSubject<number>(prod.stock);
@@ -62,5 +63,4 @@ export class CatalogComponent implements OnInit {
     const prodAdd = this.shopCarData.pushProduct2Car(sid, prod._id, prod.price, prodQtt, stocknow) < 0 ? 1 : 0;
     this.shopCarIcon.setBadgeOnAdd(prodAdd);
   }
-
 }

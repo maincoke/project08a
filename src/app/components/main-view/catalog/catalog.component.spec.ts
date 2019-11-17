@@ -1,3 +1,4 @@
+/** Especificaciones del Componente del Catálogo de Productos de la Tienda Online */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CatalogComponent } from './catalog.component';

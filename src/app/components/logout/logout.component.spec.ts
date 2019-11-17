@@ -1,3 +1,4 @@
+/** Especificaciones del Componente para la salida de la Tienda Online */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LogoutComponent } from './logout.component';

@@ -1,3 +1,4 @@
+/** Componente de código Typescript para cargar el Detalle de un Producto en la Tienda Online */
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -10,14 +11,14 @@ import { Product } from '../../../data-model/product';
   templateUrl: './view-product.component.html',
   styleUrls: ['./view-product.component.css']
 })
-export class ViewProductComponent implements OnInit {
+export class ViewProductComponent implements OnInit { // Clase del Componente de visualización del Detalle de un Producto./
   public prodShow: ParamMap;
   public prodShowData: Product = new Product;
 
   constructor(private dataService: DataService, private userSid: GetSidService,
               private barNotice: MatSnackBar, private shopRouter: Router, private prodRoute: ActivatedRoute) { }
 
-  ngOnInit() {
+  ngOnInit() { // Método: Se ejecuta para inicializar y verificar los datos del detalle de un producto en la Tienda Online./
     const sid: string = this.userSid.sendSid();
     const prodId = this.prodRoute.snapshot.paramMap.get('id');
     this.dataService.getShowProduct(sid, prodId).then(res  => {

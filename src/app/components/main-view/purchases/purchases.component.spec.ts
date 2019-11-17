@@ -1,3 +1,4 @@
+/** Especificaciones del Componente de las Compras realizadas en la Tienda Online */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PurchasesComponent } from './purchases.component';

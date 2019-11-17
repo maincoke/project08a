@@ -1,3 +1,4 @@
+/** Especificaciones del Servicio de Sesión de Usuario en la Tienda Online */
 import { TestBed } from '@angular/core/testing';
 
 import { GetSidService } from './get-sid.service';

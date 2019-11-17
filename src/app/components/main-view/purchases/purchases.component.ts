@@ -1,3 +1,4 @@
+/** Componente de código Typescript para cargar las Compras realizadas en la Tienda Online */
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NestedTreeControl } from '@angular/cdk/tree';
@@ -15,7 +16,7 @@ import { Product } from '../../../data-model/product';
   styleUrls: ['./purchases.component.css'],
   providers: [PurchasesService]
 })
-export class PurchasesComponent implements OnInit {
+export class PurchasesComponent implements OnInit { // Clase del Componente de las Compras Realizadas en la Tienda Online./
   private dataPurchase: ShopCar[];
   private productsShop: Product[];
   public ctrlTree: NestedTreeControl<PurchaseNode>;
@@ -28,11 +29,11 @@ export class PurchasesComponent implements OnInit {
     this.purchaseSrv.purchasesNew.subscribe(data => this.srcData.data = data);
   }
 
-  ngOnInit() {
+  ngOnInit() { // Método: Que se ejecuta al cargar los datos de las compras realizadas en la Tienda Oline./
     this.loadPurchases();
   }
 
-  loadPurchases() {
+  loadPurchases() { // Evento: Ejecuta la verificación de los datos de las compras realizadas en la Tienda Online./
     const sid = this.userSid.sendSid();
     let uname: string; let umail: string;
     this.dataService.getPurchases(sid).then(res => {
@@ -63,5 +64,7 @@ export class PurchasesComponent implements OnInit {
     });
   }
 
-  hasNested(_: number, node: PurchaseNode) { return !!node.nodenested && node.nodenested.length > 0; }
+  hasNested(_: number, node: PurchaseNode) { // Método: Realiza la verificación de nodos de los datos y detalles de los productos./
+    return !!node.nodenested && node.nodenested.length > 0;
+  }
 }

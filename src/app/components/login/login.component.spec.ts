@@ -1,3 +1,4 @@
+/** Especificaciones del Componente de Ingreso con credenciales a la Tienda Online */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';

@@ -1,3 +1,4 @@
+/** Componente de código Typescript para cargar el Ingreso con credenciales a la Tienda Online */
 import { Component, Renderer2, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, Validators, NgForm, FormGroup, FormControlName } from '@angular/forms';
@@ -12,7 +13,7 @@ import { Creds } from '../../data-model/creds';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements AfterViewChecked {
+export class LoginComponent implements AfterViewChecked { // Clase del Componente de Ingreso a la Tienda Online./
   public loginAccount = new FormControl('', [ Validators.required, Validators.email ]);
   public passwAccount = new FormControl('', [ Validators.required, Validators.minLength(8) ]);
   public credsForm: FormGroup = new FormGroup({
@@ -25,11 +26,11 @@ export class LoginComponent implements AfterViewChecked {
               public barNotice: MatSnackBar, public shopRouter: Router) {
   }
 
-  ngAfterViewChecked() {
+  ngAfterViewChecked() { // Método: Se ejecuta despues de que la vista del componente a sido verificada./
     this.bgRender.addClass(document.body, 'bckgr-login');
   }
 
-  submitLogin() {
+  submitLogin() { // Evento: Ejecuta la verificación de las credenciales para ingresar a la Tienda Online./
     if (this.credsForm.valid) {
       const userCreds: Creds = new Creds();
       userCreds.email = this.loginAccount.value;
@@ -60,7 +61,7 @@ export class LoginComponent implements AfterViewChecked {
     this.submitBttn = true;
   }
 
-  signupUser() {
+  signupUser() { // Evento: Ejecuta la visualización de la ventana dialogo para el registro de Usuario./
     const singupDialog = this.userDialog.open(SignupComponent, {
       panelClass: 'signup-dialog',
       width: '40%',
@@ -71,7 +72,7 @@ export class LoginComponent implements AfterViewChecked {
     });
   }
 
-  disablingBtn() {
+  disablingBtn() { // Evento: Se ejecuta para habilitar/deshabilitar el botón de Ingreso a la Tienda OnLine./
     if (this.loginAccount.valid && this.passwAccount.valid) { this.submitBttn = false; } else { this.submitBttn = true; }
   }
 }

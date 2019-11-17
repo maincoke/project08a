@@ -1,3 +1,4 @@
+/** Especificaciones del Componente de la Barra Superior-UI de la Tienda Online */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TopbarComponent } from './topbar.component';

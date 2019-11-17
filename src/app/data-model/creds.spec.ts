@@ -1,3 +1,4 @@
+/** Especificaciones de Clase Global de las Credenciales de Usuario */
 import { Creds } from './creds';
 
 describe('Creds', () => {

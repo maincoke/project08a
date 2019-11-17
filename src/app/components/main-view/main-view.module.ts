@@ -1,3 +1,4 @@
+/** Importación/Exportación de Módulos del Framework Angular Core, Angular Materials, Componentes y Servicios de 2do. Nivel */
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';

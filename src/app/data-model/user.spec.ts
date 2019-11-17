@@ -1,3 +1,4 @@
+/** Especificaciones de Clase Global de un Usuario de la Tienda Online */
 import { User } from './user';
 
 describe('User', () => {

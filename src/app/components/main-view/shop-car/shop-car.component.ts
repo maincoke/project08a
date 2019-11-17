@@ -1,3 +1,4 @@
+/** Componente de código Typescript para cargar los productos del Carrito de Compras de la Tienda Online */
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { TopbarComponent } from '../topbar/topbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,6 +9,7 @@ import { ShopCarService } from '../../../services/shop-car.service';
 import { Product } from '../../../data-model/product';
 import { ShopCar } from '../../../data-model/shop-car';
 
+// Modelo Interface: Productos del Carrito de Compras./
 export interface ProdsCar { id: string; name: string; img: string; price: number; quantt: number; subcheck: number; }
 
 @Component({
@@ -15,7 +17,7 @@ export interface ProdsCar { id: string; name: string; img: string; price: number
   templateUrl: './shop-car.component.html',
   styleUrls: ['./shop-car.component.css']
 })
-export class ShopCarComponent implements OnInit {
+export class ShopCarComponent implements OnInit { // Clase del Componente del Carrito de Compras de la Tienda Online./
   public shopcarProds: ShopCar = new ShopCar();
   public listProds: Product[];
   public listProdsCar: ProdsCar[] = new Array;
@@ -25,11 +27,11 @@ export class ShopCarComponent implements OnInit {
               private renderizer: Renderer2, private barNotice: MatSnackBar, private shopRouter: Router,
               private shopCarIcon: TopbarComponent) { }
 
-  ngOnInit() {
+  ngOnInit() { // Método: Se ejecuta para cargar los datos de productos del Carrito de Compras./
     this.loadingShopcar();
   }
 
-  loadingShopcar() {
+  loadingShopcar() { // Evento: Ejecuta la verificación y comprobación de los datos de productos del Carrito de Compras./
     const sid: string = this.userSid.sendSid();
     this.shopCarSrv.getShopCarData(sid);
     if (!this.shopCarSrv.error && sid) {
@@ -53,7 +55,7 @@ export class ShopCarComponent implements OnInit {
     }
   }
 
-  bindingDataCarProds() {
+  bindingDataCarProds() { // Método: Realiza la relación de los datos entre los productos del Catálogo y los del Carrito de Compras./
     this.listProdsCar = new Array;
     this.totalCar = 0;
     this.shopcarProds.products.forEach((prodcar: {id: string; price: number; quantt: number}, pidx: number) => {
@@ -68,7 +70,7 @@ export class ShopCarComponent implements OnInit {
     });
   }
 
-  purchaseShopCar() {
+  purchaseShopCar() { // Evento: Ejecuta la confirmación de Compra de los productos del Carrito de Compras./
     const sid = this.userSid.sendSid();
     const parentList = this.renderizer.parentNode(document.getElementById('0'));
     const shopCarOrder = this.shopCarSrv.shopCar.order;
@@ -90,7 +92,7 @@ export class ShopCarComponent implements OnInit {
     });
   }
 
-  removeProdCar(idxProd: any, prodId: any, qtProd: any) {
+  removeProdCar(idxProd: any, prodId: any, qtProd: any) { // Evento: Realiza la compra y vaciado de los productos del Carrito de Compras./
     const parentList = this.renderizer.parentNode(document.getElementById(idxProd));
     const sid: string = this.userSid.sendSid();
     this.renderizer.removeChild(parentList, document.getElementById(idxProd));

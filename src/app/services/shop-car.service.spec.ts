@@ -1,3 +1,4 @@
+/** Especificaciones del Servicio que gestiona el Carrito de Compras de la Tienda Online */
 import { TestBed } from '@angular/core/testing';
 
 import { ShopCarService } from './shop-car.service';

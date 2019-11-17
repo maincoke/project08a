@@ -1,3 +1,4 @@
+/** Especificaciones del Componente del Carrito de Compras de la Tienda Online */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ShopCarComponent } from './shop-car.component';
