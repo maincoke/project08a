@@ -82,7 +82,8 @@ export class ShopCarComponent implements OnInit { // Clase del Componente del Ca
           parentList.innerHTML = '';
           this.listProdsCar = new Array;
           this.shopCarIcon.setIconBadge();
-          this.barNotice.open(res.body.msgscs, '', { duration: 1500, panelClass: 'notice-bar-success'});
+          this.barNotice.open(res.body.msgscs, '', { duration: 2000, panelClass: 'notice-bar-success'});
+          this.shopRouter.navigate([ '../catalogo' ]);
         } else {
           this.barNotice.open(res.body.msgerr, '', { duration: 1500, panelClass: 'notice-bar-error'});
         }
