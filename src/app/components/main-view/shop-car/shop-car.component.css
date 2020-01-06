@@ -10,7 +10,8 @@ span, label, input, p, b {
 }
 
 .shopcar {
-  border-radius: 5px !important;
+  max-height: 85vh !important;
+  overflow-y: scroll !important;
 }
 
 .payment {

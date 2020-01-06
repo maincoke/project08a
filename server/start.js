@@ -19,7 +19,7 @@ const shop = express();
 const urldb = 'mongodb://localhost/onlineshop';
 
 /* Conexión con la BD MongoDB con el framework Mongoose */
-mongoose.connect(urldb, { useNewUrlParser: true });
+mongoose.connect(urldb, { useNewUrlParser: true , useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Hubo un error en la conexión con el MongoDB:\n'));
 db.once('open', function() {

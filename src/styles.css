@@ -33,6 +33,10 @@ body {
   border-radius: 5px;
 }
 
+.header-page {
+  border-radius: 5px !important;
+}
+
 .signup-dialog .mat-dialog-container {
   background-color: dimgray !important;
   background: dimgray !important;

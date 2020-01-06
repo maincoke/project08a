@@ -1,4 +1,8 @@
 /** Estilos personalizados para el componente de las Compras realizadas en la Tienda Online */
+.shoppingcars {
+  max-height: 85vh !important;
+  overflow-y: scroll !important;
+}
 
 .purchases-tree-invisible {
   display: none;

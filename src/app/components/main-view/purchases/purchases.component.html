@@ -1,13 +1,13 @@
 <!-- ** Plantilla Componente HTML5 de las Compras Realizadas en la Tienda Online -->
 <div class="col-xl-10 col-lg-10 col-md-10 offset-xl-1 offset-lg-1 offset-md-1 col-12 mb-3">
-  <div class="shoppingcars col bg-light">
+  <div class="header-page col bg-light">
     <div class="row">
       <div class="col-xl-9 col-lg-8 col-md-6 col-12 mt-2">
           <h2 class="mt-4">Compras realizadas</h2>
       </div>
     </div>
     <mat-divider></mat-divider>
-    <div class="row">
+    <div class="row shoppingcars">
       <div class="col-12 mt-2 p-2">
         <h4 class="text-center" *ngIf="srcData.data.length === 0">Sin Compras de Carrito realizadas!!</h4>
         <mat-tree [dataSource]="srcData" [treeControl]="ctrlTree" class="purchases-tree">

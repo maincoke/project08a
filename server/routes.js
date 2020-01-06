@@ -149,7 +149,7 @@ Router.post('/updateprod/:id', function(req, res) {
   this.getSession(req.body.sid).then(sessusr => {
     const setPrc = "shopcar.$.products." + req.body.idx.toString() + ".price";
     const setQtt = "shopcar.$.products." + req.body.idx.toString() + ".quantt";
-    User.updateOne({ emailusr: sessusr.username, "shopcar.paidod": false, "shopcar.products.id": objectId(req.params.id) },
+    User.updateOne({ emailusr: sessusr.username, "shopcar.paidod": false },
     { $set: { [setPrc]: req.body.price, [setQtt]: req.body.quantt } }, (error, doc) => {
       if (!error) {
         updStockProd(req.params.id, req.body.newstk);
@@ -166,7 +166,7 @@ Router.post('/updateprod/:id', function(req, res) {
 // *** Eliminación de un producto en el Carrito del Usuario en la Tienda Online *** //
 Router.post('/deleteprod/:id', function(req, res) {
   this.getSession(req.body.sid).then(sessusr => {
-    User.updateOne({ emailusr: sessusr.username, "shopcar.paidod": false, "shopcar.products.id": objectId(req.params.id) },
+    User.updateOne({ emailusr: sessusr.username, "shopcar.paidod": false },
     { "$pull": { "shopcar.$.products": { id: objectId(req.params.id) }}}, (error, doc) => {
       if (!error) {
          updStockProd(req.params.id, req.body.newstk);

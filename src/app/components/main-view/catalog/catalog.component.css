@@ -15,7 +15,8 @@ h2 {
 }
 
 .catalog {
-  border-radius: 5px !important;
+  max-height: 85vh !important;
+  overflow-y: scroll !important;
 }
 
 mat-card.product {
